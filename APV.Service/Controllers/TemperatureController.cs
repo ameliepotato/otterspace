@@ -25,7 +25,7 @@ namespace APV.Service.Controllers
             {
                 Date = DateTime.Now,
                 TemperatureC = Random.Shared.Next(-20, 55),
-                ID = id
+                ID = id++
             })
             .ToArray();
         }
