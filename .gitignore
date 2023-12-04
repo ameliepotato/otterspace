@@ -1,0 +1,9 @@
+﻿################################################################################
+# This .gitignore file was automatically created by Microsoft(R) Visual Studio.
+################################################################################
+
+/APV.Service/obj
+/APV.Service/.vs
+/.vs/OtterSpace/v17
+/.vs
+/APV.Service/bin/Debug/net6.0
