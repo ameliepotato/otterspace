@@ -6,11 +6,6 @@ namespace APV.Service.Controllers
     [Route("[controller]")]
     public class TemperatureController : ControllerBase
     {
-        private static readonly string[] Summaries = new[]
-        {
-        "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
-    };
-
         private readonly ILogger<TemperatureController> _logger;
 
         public TemperatureController(ILogger<TemperatureController> logger)
