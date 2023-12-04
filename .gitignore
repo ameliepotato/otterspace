@@ -7,3 +7,5 @@
 /.vs/OtterSpace/v17
 /.vs
 /APV.Service/bin/Debug/net6.0
+/APV.Console/bin/Debug/net6.0
+/APV.Console/obj
