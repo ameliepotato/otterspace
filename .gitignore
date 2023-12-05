@@ -9,3 +9,5 @@
 /APV.Service/bin/Debug/net6.0
 /APV.Console/bin/Debug/net6.0
 /APV.Console/obj
+/APV.Service.Tests/bin/Debug/net7.0
+/APV.Service.Tests/obj
