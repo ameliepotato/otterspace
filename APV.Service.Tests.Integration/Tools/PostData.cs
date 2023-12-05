@@ -2,7 +2,7 @@ using System.Linq;
 using System.Net.Http;
 using System.Security.Cryptography.X509Certificates;
 
-namespace TestTools
+namespace APV.TestTools
 {
     public class PostData
     {

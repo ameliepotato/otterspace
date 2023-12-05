@@ -1,6 +1,6 @@
-using TestTools;
+using APV.TestTools;
 
-namespace APV.Service.Tests
+namespace APV.Service.Tests.Integration
 {
     [TestClass]
     public class SubmitReading
@@ -19,18 +19,18 @@ namespace APV.Service.Tests
             Assert.AreEqual(expectedResult, response);
         }
 
-        //[TestMethod]
-        //public void SubmitReadingFails()
-        //{
-        //    //arrange
-        //    var apiLocation = "https://localhost:32788/Reading";
-        //    var expectedResult = "The id field is required.";
+        [TestMethod]
+        public void SubmitReadingFails()
+        {
+            //arrange
+            var apiLocation = "https://localhost:32788/Reading";
+            var expectedResult = "The id field is required.";
 
-        //    //act
-        //    string response = PostData.Post(apiLocation, new Dictionary<string, object>());
+            //act
+            string response = PostData.Post(apiLocation, new Dictionary<string, object>());
 
-        //    //assert
-        //    Assert.IsTrue(response.Contains(expectedResult));
-        //}
+            //assert
+            Assert.IsTrue(response.Contains(expectedResult));
+        }
     }
 }
