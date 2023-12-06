@@ -9,11 +9,14 @@ namespace APV.Service.Tests.Integration
         public void SubmitReadingSuccess()
         {
             //arrange
-            var apiLocation = "https://localhost:32788/Reading?id=Reader1&temperature=22";
+            var apiLocation = "http://localhost:32771/Reading";
+            Dictionary<string, object> postParams = new Dictionary<string, object>();
+            postParams.Add("id", "Reader1");
+            postParams.Add("temperature", 22);
             var expectedResult = "true";
 
             //act
-            string response = PostData.Post(apiLocation, new Dictionary<string, object>());
+            string response = PostData.Post(apiLocation, postParams);
 
             //assert
             Assert.AreEqual(expectedResult, response);
@@ -23,14 +26,15 @@ namespace APV.Service.Tests.Integration
         public void SubmitReadingFails()
         {
             //arrange
-            var apiLocation = "https://localhost:32788/Reading";
-            var expectedResult = "The id field is required.";
+            var apiLocation = "http://localhost:32771/Reading";
+            var expectedResult = "both id and temperature are required";
 
             //act
             string response = PostData.Post(apiLocation, new Dictionary<string, object>());
 
             //assert
-            Assert.IsTrue(response.Contains(expectedResult));
+            Assert.AreEqual(expectedResult, response);
         }
+
     }
 }
