@@ -1,6 +1,8 @@
 using Microsoft.AspNetCore.DataProtection.KeyManagement;
 using Microsoft.AspNetCore.Mvc;
+using System.Runtime.CompilerServices;
 
+[assembly: InternalsVisibleTo("APV.Service.Tests.Unit")]
 namespace APV.Service.Controllers
 {
     [ApiController]
@@ -15,19 +17,21 @@ namespace APV.Service.Controllers
         }
 
         [HttpPost(Name = "SubmitReading")]
-        public string Submit()
+        public string Submit(string? id, int? temperature)
         {
-            if(!HttpContext.Request.Form.Keys.Contains("id") && !HttpContext.Request.Form.Keys.Contains("temperature"))
-            {
-                return "both id and temperature are required";
-            }
-            string id = HttpContext.Request.Form["id"];
+
+            //if (!HttpContext.Request.Form.Keys.Contains("id") && !HttpContext.Request.Form.Keys.Contains("temperature"))
+            //{
+            //    return "both id and temperature are required";
+            //}
+            id = id??HttpContext.Request.Form["id"];
             if (string.IsNullOrEmpty(id))
             {
                 return "no id";
             }
-            string temp = HttpContext.Request.Form["temperature"];
-            if (string.IsNullOrEmpty(temp))
+            temperature = temperature.HasValue? temperature.Value : Convert.ToInt32(HttpContext.Request.Form["temperature"]);
+
+            if (!temperature.HasValue)
             {
                 return "no temperature";
             }

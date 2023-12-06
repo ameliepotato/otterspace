@@ -18,6 +18,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\APV.Service.Tests.Integration\APV.Service.Tests.Integration.csproj" />
+    <ProjectReference Include="..\APV.Service\APV.Service.csproj" />
   </ItemGroup>
 
 </Project>

@@ -1,4 +1,6 @@
-using APV.TestTools;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using APV.Service.Controllers;
+using Microsoft.AspNetCore.Mvc;
 
 namespace APV.Service.Tests.Unit
 {
@@ -8,7 +10,13 @@ namespace APV.Service.Tests.Unit
         [TestMethod]
         public void SubmitReadingSuccess()
         {
-            Assert.IsTrue(true);
+            ReadingController controller = new ReadingController(null);
+            controller.ControllerContext = new ControllerContext();
+            
+            // Act
+            string result = controller.Submit("doi", 3);
+
+            Assert.AreEqual("true", result);
         }
     }
 }
