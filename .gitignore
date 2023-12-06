@@ -15,3 +15,6 @@
 /APV.Service.Tests.Integration/obj
 /APV.Service.Tests.Unit/bin/Debug/net7.0
 /APV.Service.Tests.Unit/obj
+/packages
+/APV.Service.Tests.Unit/bin/Debug
+/APV.Service/bin/Debug/net7.0
