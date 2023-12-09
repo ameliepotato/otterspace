@@ -1,6 +1,3 @@
-using System.Linq;
-using System.Net.Http;
-using System.Security.Cryptography.X509Certificates;
 
 namespace APV.TestTools
 {
