@@ -5,12 +5,12 @@ namespace APV.Service.Services
     public class SensorService
     {
         private List<Sensor> _sensors;
-        private string _file = Directory.GetCurrentDirectory() + "\\sensorService.json";
+        private string _file = Directory.GetCurrentDirectory() + Path.DirectorySeparatorChar + "sensorService.json";
         public SensorService(string? file = null)
         {
-            if (!string.IsNullOrEmpty(file) || !File.Exists(file))
+            if (!string.IsNullOrEmpty(file) && File.Exists(file))
             {
-                _file = file ?? _file;
+                _file = file;
             }
             _sensors = new List<Sensor>();
             LoadFromFile();

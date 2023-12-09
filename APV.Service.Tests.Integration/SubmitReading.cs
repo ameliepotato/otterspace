@@ -12,7 +12,7 @@ namespace APV.Service.Tests.Integration
             //arrange
             var apiLocation = "http://localhost:37069/Reading";
             Dictionary<string, object> postParams = new Dictionary<string, object>();
-            postParams.Add("id", "Reader1");
+            postParams.Add("id", "One");
             postParams.Add("temperature", 22);
             var expectedResult = "true";
 
@@ -20,7 +20,7 @@ namespace APV.Service.Tests.Integration
             string response = PostData.Post(apiLocation, postParams);
 
             //assert
-            Assert.AreEqual(expectedResult, response);
+            Assert.AreEqual(expectedResult, response.ToLower());
         }
 
         [TestMethod]
