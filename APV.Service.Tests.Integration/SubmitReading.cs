@@ -10,7 +10,7 @@ namespace APV.Service.Tests.Integration
         public void SubmitReadingSuccess()
         {
             //arrange
-            var apiLocation = "http://localhost:32779/Reading";
+            var apiLocation = "http://localhost:37069/Reading";
             Dictionary<string, object> postParams = new Dictionary<string, object>();
             postParams.Add("id", "Reader1");
             postParams.Add("temperature", 22);
@@ -27,7 +27,7 @@ namespace APV.Service.Tests.Integration
         public void SubmitReadingFailsNoIDInPostParameters()
         {
             //arrange
-            var apiLocation = "http://localhost:32779/Reading";
+            var apiLocation = "http://localhost:37069/Reading";
             var expectedResult = "no id";
 
             //act
@@ -41,7 +41,7 @@ namespace APV.Service.Tests.Integration
         public void SubmitReadingFailsInvalidID()
         {
             //arrange
-            var apiLocation = "http://localhost:32779/Reading";
+            var apiLocation = "http://localhost:37069/Reading";
             var expectedResult = "invalid id";
             Dictionary<string, object> postParameters = new Dictionary<string, object>();
             postParameters.Add("id", "Three");

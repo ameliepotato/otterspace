@@ -12,11 +12,11 @@ namespace APV.Service.Controllers
         private readonly ILogger<ReadingController>? _logger;
         private readonly MeasurementService _measurementService;
         private readonly SensorService _sensorService;
-        public ReadingController(ILogger<ReadingController> logger, SensorService sensorService, MeasurementService measurementService)
+        public ReadingController(ILogger<ReadingController> logger, SensorService? sensorService =null, MeasurementService? measurementService = null)
         {
             _logger = logger;
-            _measurementService = measurementService;
-            _sensorService = sensorService;
+            _measurementService = measurementService ?? new MeasurementService();
+            _sensorService = sensorService ?? new SensorService();
         }
 
         [HttpPost(Name = "SubmitReading")]

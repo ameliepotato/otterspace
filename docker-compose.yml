@@ -1,0 +1,9 @@
+version: "3.3"
+services:
+  apvservice:
+    container_name: apvservice
+    build:
+      context: .
+      dockerfile: ./APV.Service/Dockerfile
+    ports:
+      - "37069:80"
