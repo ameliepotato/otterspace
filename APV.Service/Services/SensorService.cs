@@ -8,9 +8,20 @@ namespace APV.Service.Services
         private string _file = Directory.GetCurrentDirectory() + Path.DirectorySeparatorChar + "sensorService.json";
         public SensorService(string? file = null)
         {
-            if (!string.IsNullOrEmpty(file) && File.Exists(file))
+            if (!string.IsNullOrEmpty(file))
             {
-                _file = file;
+                if (!File.Exists(file))
+                {
+                    try
+                    {
+                        File.Create(file);
+                    }
+                    catch (Exception)
+                    {
+                        file = null;
+                    }
+                }
+                _file = file ?? _file;
             }
             _sensors = new List<Sensor>();
             LoadFromFile();

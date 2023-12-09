@@ -11,7 +11,7 @@ namespace APV.Service.Tests.Unit
         public void LoadFromInexistentFile()
         {
             // Arrange
-            string filePath = Directory.GetCurrentDirectory() + "\\Inexistent.json";
+            string filePath = Directory.GetCurrentDirectory() + Path.DirectorySeparatorChar + "Inexistent.json";
 
             // Act
             Services.SensorService service = new Services.SensorService(filePath);
