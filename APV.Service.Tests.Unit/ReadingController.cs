@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace APV.Service.Tests.Unit
 {
     [TestClass]
-    public class SubmitReading
+    public class ReadingController
     {
         [TestMethod]
         public void SubmitReadingSuccess()
@@ -13,7 +13,7 @@ namespace APV.Service.Tests.Unit
             // Arrange
             string filePath = Directory.GetCurrentDirectory() + "\\..\\..\\..\\TestData\\ValidSensorService.json";
             Services.SensorService ss = new Service.Services.SensorService(filePath);
-            ReadingController controller = new ReadingController(null, ss, new Services.MeasurementService());
+            Controllers.ReadingController controller = new Controllers.ReadingController(null, ss, new Services.MeasurementService());
             // Act
             string result = controller.Submit("Two", 3);
 
@@ -27,7 +27,7 @@ namespace APV.Service.Tests.Unit
             // Arrange
             string filePath = Directory.GetCurrentDirectory() + "\\..\\..\\..\\TestData\\ValidSensorService.json";
             Services.SensorService ss = new Service.Services.SensorService(filePath);
-            ReadingController controller = new ReadingController(null, ss, new Services.MeasurementService());
+            Controllers.ReadingController controller = new Controllers.ReadingController(null, ss, new Services.MeasurementService());
             // Act
             string result = controller.Submit("Three", 3);
 
