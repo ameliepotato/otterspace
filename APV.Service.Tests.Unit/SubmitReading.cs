@@ -10,13 +10,15 @@ namespace APV.Service.Tests.Unit
         [TestMethod]
         public void SubmitReadingSuccess()
         {
-            ReadingController controller = new ReadingController(null);
-            controller.ControllerContext = new ControllerContext();
-            
+            // Arrange
+            Services.SensorService ss = new Service.Services.SensorService();
+            ss.AddSensor("doi", new KeyValuePair<int, int>(45, 5));
+            ReadingController controller = new ReadingController(null, ss, new Services.MeasurementService());
             // Act
             string result = controller.Submit("doi", 3);
 
-            Assert.AreEqual("true", result);
+            // Assert
+            Assert.AreEqual("true", result.ToLower());
         }
     }
 }
