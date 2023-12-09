@@ -2,11 +2,10 @@
 {
     public class Sensor
     {
-        public Sensor(string id, KeyValuePair<int, int> position, int? measurement, string? name)
+        public Sensor(string id, KeyValuePair<int, int> position, string? name)
         {
             Id = id;
             Position = position;
-            Measurement = measurement;
             Name = name;
         }
 
@@ -16,7 +15,5 @@
 
         public KeyValuePair<int, int> Position { get; set; }
 
-
-        public int? Measurement { get; set; }
     }
 }

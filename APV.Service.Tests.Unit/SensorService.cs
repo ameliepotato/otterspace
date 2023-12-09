@@ -8,35 +8,35 @@ namespace APV.Service.Tests.Unit
     public class SensorService
     {
         [TestMethod]
-        public void LoadFromFileSuccess()
+        public void LoadFromInexistentFile()
         {
             // Arrange
-            string filePath = Directory.GetCurrentDirectory() + "\\LoadFromFileSuccess.json";
+            string filePath = Directory.GetCurrentDirectory() + "\\Inexistent.json";
+
+            // Act
+            Services.SensorService service = new Services.SensorService(filePath);
+
+            // Assert
+            Assert.AreEqual(0, service.SensorCount());
+            Assert.AreEqual(false, service.IsSensorRegistered("id"));
+
+        }
+
+
+        [TestMethod]
+        public void LoadFromValidFile()
+        {
+            // Arrange
+            string filePath = Directory.GetCurrentDirectory() + "\\..\\..\\..\\TestData\\ValidSensorService.json";
 
             // Act
             Services.SensorService service = new Services.SensorService(filePath);
 
             // Assert
             Assert.AreEqual(2, service.SensorCount());
-        }
-
-
-        [TestMethod]
-        public void SaveToFileSuccess()
-        {
-            // Arrange
-            string filePath = Directory.GetCurrentDirectory() + "\\SaveToFileSuccess.json";
-
-            // Act
-            using (Services.SensorService service1 = new Services.SensorService(filePath))
-            {
-                service1.AddSensor("One", new KeyValuePair<int, int>(4, 5));
-                service1.AddSensor("Two", new KeyValuePair<int, int>(3, 4));
-            }
-            Services.SensorService service2 = new Services.SensorService(filePath);
-
-            // Assert
-            Assert.AreEqual(2, service2.SensorCount());
+            Assert.AreEqual(true, service.IsSensorRegistered("One"));
+            Assert.AreEqual(true, service.IsSensorRegistered("Two"));
+            Assert.AreEqual(false, service.IsSensorRegistered("Three"));
         }
     }
 }
