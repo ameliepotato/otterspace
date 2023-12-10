@@ -1,19 +1,20 @@
 ﻿using System.Security;
+using System.Text.Json;
 
 namespace APV.Service.Services
 {
-    public class MeasurementService : IDisposable
+    public class MeasurementService
     {
         private List<Measurement> _measurements { get; set; }
-        private string _filePath { get; set; }
+        private string _file { get; set; }
         public MeasurementService(string? file = null) 
         {
             if (string.IsNullOrEmpty(file))
             {
                 file = Directory.GetCurrentDirectory();
-                file += "\\measurementsService.json";
+                file += Path.DirectorySeparatorChar + "measurementsService.json";
             }
-            _filePath = file;
+            _file = file;
             _measurements = new List<Measurement>();
             LoadFromFile();
         }
@@ -28,19 +29,34 @@ namespace APV.Service.Services
             return AddMeasurement(new Measurement(sensorID, measurement));
         }
 
-        private bool SaveToFile()
+        public Measurement? GetMeasurement(string sensorID)
         {
-            return false;
+            try
+            {
+                List<Measurement> allFromSensor = _measurements.Where(x => x.SensorID == sensorID).ToList();
+                allFromSensor = allFromSensor.OrderBy(x => x.Time).ToList();
+                return allFromSensor.First();
+            }
+            catch (Exception ex)
+            {
+
+            }
+            return null;
         }
 
         private bool LoadFromFile() 
-        { 
-            return false; 
-        }
-
-        public virtual void Dispose()
         {
-            SaveToFile();
+            try
+            {
+                string jsonString = File.ReadAllText(_file);
+                _measurements = JsonSerializer.Deserialize<List<Measurement>>(jsonString);
+            }
+            catch (Exception)
+            {
+                _measurements = new List<Measurement>();
+                return false;
+            }
+            return true;
         }
     }
 }

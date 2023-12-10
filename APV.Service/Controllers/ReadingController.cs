@@ -43,5 +43,28 @@ namespace APV.Service.Controllers
 
             return _measurementService.AddMeasurement(id, temperature.Value).ToString();
         }
+
+        [HttpGet(Name = "GetReading")]
+        public string Get(string id)
+        {
+            if (string.IsNullOrEmpty(id))
+            {
+                return "no id";
+            }
+
+            if (!_sensorService.IsSensorRegistered(id))
+            {
+                return $"invalid sensor id";
+            }
+
+            Measurement m = _measurementService.GetMeasurement(id);
+
+            if (m == null)
+            {
+                return $"no temperature registered yet for {id}";
+            }
+
+            return m.Value.ToString();
+        }
     }
 }

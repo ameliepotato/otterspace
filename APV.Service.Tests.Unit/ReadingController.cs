@@ -34,5 +34,33 @@ namespace APV.Service.Tests.Unit
             // Assert
             Assert.AreEqual("invalid id", result.ToLower());
         }
+
+        [TestMethod]
+        public void GetReadingSuccessNoReadings()
+        {
+            // Arrange
+            string filePath = Directory.GetCurrentDirectory() + "\\..\\..\\..\\TestData\\ValidSensorService.json";
+            Services.SensorService ss = new Service.Services.SensorService(filePath);
+            Controllers.ReadingController controller = new Controllers.ReadingController(null, ss, new Services.MeasurementService());
+            // Act
+            string result = controller.Get("Two");
+
+            // Assert
+            Assert.AreEqual("no temperature registered yet for Two", result);
+        }
+
+        [TestMethod]
+        public void GetReadingInvalidSensor()
+        {
+            // Arrange
+            string filePath = Directory.GetCurrentDirectory() + "\\..\\..\\..\\TestData\\ValidSensorService.json";
+            Services.SensorService ss = new Service.Services.SensorService(filePath);
+            Controllers.ReadingController controller = new Controllers.ReadingController(null, ss, new Services.MeasurementService());
+            // Act
+            string result = controller.Get("Three");
+
+            // Assert
+            Assert.AreEqual("invalid sensor id", result.ToLower());
+        }
     }
 }
