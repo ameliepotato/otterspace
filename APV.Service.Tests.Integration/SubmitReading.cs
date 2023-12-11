@@ -14,13 +14,12 @@ namespace APV.Service.Tests.Integration
             Dictionary<string, object> postParams = new Dictionary<string, object>();
             postParams.Add("id", "One");
             postParams.Add("temperature", 22);
-            var expectedResult = "true";
 
             //act
             string response = PostData.Post(apiLocation, postParams);
 
             //assert
-            Assert.AreEqual(expectedResult, response.ToLower());
+            Assert.AreEqual("true", response.ToLower());
         }
 
         [TestMethod]
@@ -28,13 +27,12 @@ namespace APV.Service.Tests.Integration
         {
             //arrange
             var apiLocation = "http://localhost:37069/Reading";
-            var expectedResult = "no id";
 
             //act
             string response = PostData.Post(apiLocation, new Dictionary<string, object>());
 
             //assert
-            Assert.AreEqual(expectedResult, response);
+            Assert.AreEqual("no id", response);
         }
 
         [TestMethod]
@@ -42,7 +40,6 @@ namespace APV.Service.Tests.Integration
         {
             //arrange
             var apiLocation = "http://localhost:37069/Reading";
-            var expectedResult = "invalid id";
             Dictionary<string, object> postParameters = new Dictionary<string, object>();
             postParameters.Add("id", "Three");
             postParameters.Add("temperature", 33);
@@ -51,7 +48,7 @@ namespace APV.Service.Tests.Integration
             string response = PostData.Post(apiLocation, postParameters);
 
             //assert
-            Assert.AreEqual(expectedResult, response);
+            Assert.AreEqual("invalid id", response);
         }
 
     }
