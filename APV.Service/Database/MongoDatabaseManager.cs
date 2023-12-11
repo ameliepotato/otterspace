@@ -66,7 +66,7 @@ namespace APV.Service.Database
             {
                 //to do 
             }
-            var readingsCollection = _client.GetDatabase(_database).GetCollection<T>(_collection);
+            var readingsCollection = _client?.GetDatabase(_database)?.GetCollection<T>(_collection);
             if (readingsCollection != null)
             {
                 return readingsCollection.Find(filter)?.ToList<T>();
@@ -85,7 +85,7 @@ namespace APV.Service.Database
             {
                 //to do 
             }
-            var readingsCollection = _client.GetDatabase(_database).GetCollection<T>(_collection);
+            var readingsCollection = _client?.GetDatabase(_database).GetCollection<T>(_collection);
             if (readingsCollection != null)
             {
                 List<T> results = readingsCollection.Find(filter).ToList();
@@ -128,8 +128,8 @@ namespace APV.Service.Database
             {
                 if (data != null && IsConnected() && data.Count > 0)
                 {
-                    var readingsCollection = _client.GetDatabase(_database).GetCollection<T>(_collection);
-                    readingsCollection.InsertMany(data);
+                    var readingsCollection = _client?.GetDatabase(_database).GetCollection<T>(_collection);
+                    readingsCollection?.InsertMany(data);
                     return true;
                 }
             }

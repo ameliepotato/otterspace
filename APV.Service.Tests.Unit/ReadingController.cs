@@ -27,7 +27,7 @@ namespace APV.Service.Tests.Unit
         {
             // Arrange
             string filePath = Directory.GetCurrentDirectory() + "\\..\\..\\..\\TestData\\ValidSensorService.json";
-            Services.SensorService ss = new Service.Services.SensorService(filePath);
+            Services.SensorService ss = new Services.SensorService(filePath);
             Controllers.ReadingController controller = new Controllers.ReadingController(null, ss, new Services.MeasurementService());
             // Act
             string result = controller.Submit("Three", 3);

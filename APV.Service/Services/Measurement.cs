@@ -7,6 +7,7 @@
             SensorId = sensorID;
             Value = measurement;
             Time = time ?? DateTime.Now;
+            _id = Guid.NewGuid().ToString();
         }
         public string SensorId { get; set; }
         public int Value { get; set; }

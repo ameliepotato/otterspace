@@ -32,7 +32,7 @@ namespace APV.Service.Services
             try
             {
                 string jsonString = File.ReadAllText(_file);
-                _sensors = JsonSerializer.Deserialize<List<Sensor>>(jsonString);
+                _sensors = JsonSerializer.Deserialize<List<Sensor>>(jsonString)??new List<Sensor>();
             }
             catch (Exception)
             {
