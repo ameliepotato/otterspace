@@ -64,7 +64,7 @@ namespace APV.Service.Database
             var filter = Builders<T>.Filter.Empty;
             if (filters != null)
             {
-                //to do 
+                filter = Builders<T>.Filter.Eq(filters.First().Key, filters.First().Value);
             }
             var readingsCollection = _client?.GetDatabase(_database)?.GetCollection<T>(_collection);
             if (readingsCollection != null)
@@ -81,9 +81,9 @@ namespace APV.Service.Database
                 return default(T);
             }
             var filter = Builders<T>.Filter.Empty;
-            if (filters != null)
+            if (filters != null && filters.Count > 0)
             {
-                //to do 
+                filter = Builders<T>.Filter.Eq(filters.First().Key, filters.First().Value);
             }
             var readingsCollection = _client?.GetDatabase(_database).GetCollection<T>(_collection);
             if (readingsCollection != null)

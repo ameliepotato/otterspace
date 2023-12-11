@@ -41,7 +41,7 @@ namespace APV.Service.Services
                 try
                 {
                     Dictionary<string, string> filters = new Dictionary<string, string>();
-                    filters.Add("sensorid", sensorId);
+                    filters.Add("SensorId", sensorId);
                     return _dbManager?.GetData<Measurement>(filters);
                 }
                 catch (Exception ex)
