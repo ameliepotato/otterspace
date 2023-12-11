@@ -21,27 +21,34 @@ namespace APV.Service.Controllers
 
         [HttpPost(Name = "SubmitReading")]
         public string Submit(string? id, int? temperature)
-        { 
-            id = id??HttpContext.Request.Form["id"];
-            if (string.IsNullOrEmpty(id))
+        {
+            try
             {
-                return "no id";
+                id = id ?? HttpContext.Request.Form["id"];
+                if (string.IsNullOrEmpty(id))
+                {
+                    return "no id";
+                }
+
+                if (!_sensorService.IsSensorRegistered(id))
+                {
+                    return "invalid id";
+                }
+
+                temperature = temperature.HasValue ? temperature.Value : Convert.ToInt32(HttpContext.Request.Form["temperature"]);
+
+                if (!temperature.HasValue)
+                {
+                    return "no temperature";
+                }
+
+
+                return _measurementService.AddMeasurement(id, temperature.Value).ToString();
             }
-            
-            if(!_sensorService.IsSensorRegistered(id))
+            catch (Exception e)
             {
-                return "invalid id";
+                return e.Message;
             }
-            
-            temperature = temperature.HasValue? temperature.Value : Convert.ToInt32(HttpContext.Request.Form["temperature"]);
-
-            if (!temperature.HasValue)
-            {
-                return "no temperature";
-            }
-
-
-            return _measurementService.AddMeasurement(id, temperature.Value).ToString();
         }
 
         [HttpGet(Name = "GetReading")]
