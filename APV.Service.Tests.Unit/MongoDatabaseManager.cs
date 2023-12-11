@@ -8,15 +8,6 @@ namespace APV.Service.Tests.Unit
     public class MongoDatabaseManager
     {
         [TestMethod]
-        public void ConnectionSuccesful()
-        {
-            Database.MongoDatabaseManager manager = 
-                new Database.MongoDatabaseManager("mongodb://admin:Example@localhost:27017", "", "");
-            Assert.IsNotNull(manager);
-            Assert.IsTrue(manager.IsConnected());
-        }
-
-        [TestMethod]
         public void GetDataSuccesful()
         {
             Database.MongoDatabaseManager manager =

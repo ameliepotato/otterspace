@@ -9,14 +9,14 @@ namespace APV.Service.Controllers
     [Route("[controller]")]
     public class ReadingController : ControllerBase
     {
-        private readonly ILogger<ReadingController>? _logger;
-        private readonly MeasurementService _measurementService;
-        private readonly SensorService _sensorService;
-        public ReadingController(ILogger<ReadingController>? logger = null, SensorService? sensorService =null, MeasurementService? measurementService = null)
+        private readonly ILogger _logger;
+        private readonly IMeasurementService _measurementService;
+        private readonly ISensorService _sensorService;
+        public ReadingController(ILogger logger, ISensorService sensorService, IMeasurementService measurementService)
         {
             _logger = logger;
-            _measurementService = measurementService ?? new MeasurementService();
-            _sensorService = sensorService ?? new SensorService();
+            _measurementService = measurementService;
+            _sensorService = sensorService;
         }
 
         [HttpPost(Name = "SubmitReading")]

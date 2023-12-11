@@ -7,22 +7,29 @@ using System.Reflection.Metadata;
 [assembly: InternalsVisibleTo("APV.Service.Tests.Unit")]
 namespace APV.Service.Database
 {
-    public class MongoDatabaseManager
+    public class MongoDatabaseManager : IDataManager
 
     {
-        private MongoClient? _client { get; }
+        private IMongoClient? _client { get; }
         private string? _database { get; }
         private string? _collection { get; }
 
-        public MongoDatabaseManager(string connection, string database, string? collection = null)
+        public MongoDatabaseManager(IMongoClient client, string database, string collection)
         {
-            if (connection == null)
+            _client = client;
+            _database = database;
+            _collection = collection;
+        }
+
+        public MongoDatabaseManager(string connection, string database, string collection)
+        {
+            if (string.IsNullOrEmpty(connection))
             {
                 Console.WriteLine("No connection string");
                 return;
             }
 
-            if (database == null) 
+            if (string.IsNullOrEmpty(database)) 
             {
                 Console.WriteLine("No database name.");
                 return;

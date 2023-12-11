@@ -2,10 +2,14 @@
 
 namespace APV.Service.Services
 {
-    public class MeasurementService
+    public class MeasurementService : IDbService, IMeasurementService
     {
-        private MongoDatabaseManager? _dbManager { get; set; }
+        private IDataManager? _dbManager { get; set; }
 
+        public MeasurementService(IDataManager databaseManager)
+        {
+            _dbManager = databaseManager;
+        }
         public MeasurementService(string? connectionString = null)
         {
             _dbManager = null;
@@ -29,14 +33,14 @@ namespace APV.Service.Services
                 }
             }
         }
-        public bool IsConnectedToDB()
+        public bool IsConnected()
         {
             return _dbManager != null && _dbManager.IsConnected();
         }
 
         public Measurement? GetMeasurement(string sensorId)
         {
-            if (IsConnectedToDB())
+            if (IsConnected())
             {
                 try
                 {
@@ -54,7 +58,7 @@ namespace APV.Service.Services
 
         public bool AddMeasurement(string sensorID, int temp, DateTime? time = null)
         {
-            if (IsConnectedToDB())
+            if (IsConnected())
             {
                 if (time == null)
                 {

@@ -2,7 +2,7 @@
 
 namespace APV.Service.Services
 {
-    public class SensorService
+    public class SensorService : ISensorService
     {
         private List<Sensor> _sensors;
         private string _file = Directory.GetCurrentDirectory() + Path.DirectorySeparatorChar + "sensorService.json";
@@ -27,7 +27,7 @@ namespace APV.Service.Services
             LoadFromFile();
         }
 
-        private bool LoadFromFile()
+        public bool LoadFromFile()
         {
             try
             {
