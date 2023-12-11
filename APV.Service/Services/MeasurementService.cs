@@ -1,62 +1,58 @@
-﻿using System.Security;
+﻿using APV.Service.Database;
+using System.Globalization;
+using System.Security;
 using System.Text.Json;
 
 namespace APV.Service.Services
 {
     public class MeasurementService
-    {
-        private List<Measurement> _measurements { get; set; }
-        private string _file { get; set; }
-        public MeasurementService(string? file = null) 
-        {
-            if (string.IsNullOrEmpty(file))
-            {
-                file = Directory.GetCurrentDirectory();
-                file += Path.DirectorySeparatorChar + "measurementsService.json";
-            }
-            _file = file;
-            _measurements = new List<Measurement>();
-            LoadFromFile();
-        }
-        public bool AddMeasurement(Measurement measurement)
-        {
-            _measurements.Add(measurement);
-            return true;
-        }
+    { 
+        private MongoDatabaseManager _dbManager { get; set; }
 
-        public bool AddMeasurement(string sensorID, int measurement)
+        public MeasurementService(string? connectionString = null)
         {
-            return AddMeasurement(new Measurement(sensorID, measurement));
+            connectionString = string.IsNullOrEmpty(connectionString) ?
+                    Environment.GetEnvironmentVariable("MEASUREMENTSDB_CONNECTIONSTRING") :
+                    connectionString;
+
+            if (connectionString == null)
+            {
+                Console.WriteLine("No connection string.");
+            }
+            else
+            {
+                _dbManager = new MongoDatabaseManager(connectionString, "Measurements", "Readings");
+            }
+        }
+        public bool IsConnectedToDB()
+        {
+            return _dbManager.IsConnected();
         }
 
         public Measurement? GetMeasurement(string sensorID)
         {
             try
             {
-                List<Measurement> allFromSensor = _measurements.Where(x => x.SensorID == sensorID).ToList();
-                allFromSensor = allFromSensor.OrderBy(x => x.Time).ToList();
-                return allFromSensor.First();
+                Dictionary<string, string> filters = new Dictionary<string, string>();
+                filters.Add("sensorid", sensorID);
+                return _dbManager.GetData<Measurement>(filters);
             }
             catch (Exception ex)
             {
-
+                Console.WriteLine($"Error when retrieving measurements: {ex.Message}");
             }
             return null;
         }
 
-        private bool LoadFromFile() 
+        public bool AddMeasurement(string sensorID, int temp, DateTime? time = null)
         {
-            try
+            if(time == null)
             {
-                string jsonString = File.ReadAllText(_file);
-                _measurements = JsonSerializer.Deserialize<List<Measurement>>(jsonString);
+                time = DateTime.Now;
             }
-            catch (Exception)
-            {
-                _measurements = new List<Measurement>();
-                return false;
-            }
-            return true;
+            Measurement measurement = new Measurement(sensorID, temp, time);
+            measurement._id = time.Value.Ticks.ToString();
+            return _dbManager.AddData<Measurement>(measurement);
         }
     }
 }

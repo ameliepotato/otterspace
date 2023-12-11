@@ -13,7 +13,8 @@ namespace APV.Service.Tests.Unit
             // Arrange
             string filePath = Directory.GetCurrentDirectory() + "\\..\\..\\..\\TestData\\ValidSensorService.json";
             Services.SensorService ss = new Service.Services.SensorService(filePath);
-            Controllers.ReadingController controller = new Controllers.ReadingController(null, ss, new Services.MeasurementService());
+            Controllers.ReadingController controller = new Controllers.ReadingController(null, ss, 
+                new Services.MeasurementService("mongodb://admin:Example@localhost:27017"));
             // Act
             string result = controller.Submit("Two", 3);
 

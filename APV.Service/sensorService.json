@@ -5,8 +5,7 @@
     "Position": {
       "Key": 4,
       "Value": 5
-    },
-    "Measurement": null
+    }
   },
   {
     "Id": "Two",
@@ -14,7 +13,6 @@
     "Position": {
       "Key": 3,
       "Value": 4
-    },
-    "Measurement": null
+    }
   }
 ]

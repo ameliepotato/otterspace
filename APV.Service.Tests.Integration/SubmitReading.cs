@@ -12,6 +12,7 @@ namespace APV.Service.Tests.Integration
             //arrange
             var apiLocation = "http://localhost:37069/Reading";
             Dictionary<string, object> postParams = new Dictionary<string, object>();
+            
             postParams.Add("id", "One");
             postParams.Add("temperature", 22);
 
