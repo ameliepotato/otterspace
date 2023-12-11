@@ -44,8 +44,8 @@ namespace APV.Service.Tests.Unit
 
             manager.AddManyData<Measurement>( new List<Measurement>()
                 {   
-                    new Services.Measurement("One", 33, DateTime.Now) { _id = DateTime.Now.Ticks.ToString()}, 
-                    new Services.Measurement("Two", 33, DateTime.Now) { _id = DateTime.Now.Ticks.ToString()}
+                    new Services.Measurement("One", 33, DateTime.Now), 
+                    new Services.Measurement("Two", 33, DateTime.Now)
                 });
 
             List<Services.Measurement>? measurements = manager.GetManyData<Services.Measurement>()?.ToList();
