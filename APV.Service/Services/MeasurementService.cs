@@ -19,7 +19,10 @@ namespace APV.Service.Services
         public bool IsConnected()
         {
             bool connected = _dbManager != null && _dbManager.IsConnected();
-            _logger.LogInformation($"Measurement service connected: {connected}");
+            if (!connected)
+            {
+                _logger.LogWarning($"Measurement service not connected");
+            }
             return connected;
         }
 
@@ -53,6 +56,7 @@ namespace APV.Service.Services
                     time = DateTime.Now;
                 }
                 Measurement measurement = new Measurement(sensorID, temp, time);
+                _logger.LogInformation($"Add Measurement of sensor: {sensorID}, temperature {temp}, time: {time?.ToLongTimeString()}");
                 return _dbManager != null && _dbManager.AddData(measurement);
             }
             _logger.LogWarning("Not added");
