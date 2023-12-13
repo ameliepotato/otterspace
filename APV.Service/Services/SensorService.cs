@@ -10,18 +10,10 @@ namespace APV.Service.Services
         {
             if (!string.IsNullOrEmpty(file))
             {
-                if (!File.Exists(file))
+                if (File.Exists(file))
                 {
-                    try
-                    {
-                        File.Create(file);
-                    }
-                    catch (Exception)
-                    {
-                        file = null;
-                    }
+                    _file = file;
                 }
-                _file = file ?? _file;
             }
             _sensors = new List<Sensor>();
             LoadFromFile();
@@ -31,10 +23,17 @@ namespace APV.Service.Services
         {
             try
             {
-                string jsonString = File.ReadAllText(_file);
-                _sensors = JsonSerializer.Deserialize<List<Sensor>>(jsonString)??new List<Sensor>();
+                if (File.Exists(_file))
+                {
+                    string jsonString = File.ReadAllText(_file);
+                    _sensors = JsonSerializer.Deserialize<List<Sensor>>(jsonString) ?? new List<Sensor>();
+                }
+                else
+                {
+                    return false;
+                }
             }
-            catch (Exception)
+            catch (Exception e)
             {
                 return false;
             }

@@ -4,7 +4,7 @@
     {
         public abstract bool IsConnected();
         public abstract T? GetData(Dictionary<string, string>? filters = null);
-
+        public abstract List<T>? GetManyData(Dictionary<string, string>? filters = null);
         public abstract bool AddData(T data);
     }
 }

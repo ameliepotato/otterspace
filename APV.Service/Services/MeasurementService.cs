@@ -26,16 +26,28 @@ namespace APV.Service.Services
             return connected;
         }
 
-        public Measurement? GetMeasurement(string sensorId)
+        public List<Measurement>? GetMeasurements()
         {
-            _logger.LogInformation($"Get Measurement of sensor: {sensorId}");
+            _logger.LogInformation($"Get Measurements");
             if (IsConnected())
             {
                 try
                 {
-                    Dictionary<string, string> filters = new Dictionary<string, string>();
-                    filters.Add("SensorId", sensorId);
-                    return _dbManager.GetData(filters);
+                    List<Measurement>? measurements = _dbManager.GetManyData();
+                    _logger.LogInformation($"Found {measurements?.Count} measurements");
+                    if (measurements != null && measurements.Count > 0)
+                    {
+                        measurements = measurements.OrderByDescending(x => x.Time).ToList();
+                        List<Measurement> lastValues = new List<Measurement>();
+                        foreach (Measurement measurement in measurements)
+                        {
+                            if(lastValues.Find( x => x.SensorId == measurement.SensorId ) == null)
+                            {
+                                lastValues.Add( measurement );
+                            }
+                        }
+                        return lastValues;
+                    }
                 }
                 catch (Exception ex)
                 {

@@ -16,6 +16,11 @@ namespace APV.Service.Tests.Unit.MockImplementations
             return true;
         }
 
+        public List<T>? GetManyData(Dictionary<string, string>? filters = null)
+        {
+            return _data;
+        }
+
         public T? GetData(Dictionary<string, string>? filters = null)
         {
             return _data.FirstOrDefault();
