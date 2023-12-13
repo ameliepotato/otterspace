@@ -1,52 +1,38 @@
 ﻿using APV.Service.Database;
+using MongoDB.Bson.Serialization.IdGenerators;
+using MongoDB.Driver.Core.Configuration;
+using System.Globalization;
 
 namespace APV.Service.Services
 {
     public class MeasurementService : IDbService, IMeasurementService
     {
-        private IDataManager? _dbManager { get; set; }
-
-        public MeasurementService(IDataManager databaseManager)
+        private readonly ILogger<MeasurementService> _logger;
+        private IDataManager<Measurement> _dbManager { get; set; }
+        public MeasurementService(ILogger<MeasurementService> logger, IDataManager<Measurement> dataManager)
         {
-            _dbManager = databaseManager;
+            _logger = logger;
+            _logger.LogInformation($"Measurement service created and is connected: {dataManager.IsConnected()}");
+            _dbManager = dataManager;
         }
-        public MeasurementService(string? connectionString = null)
-        {
-            _dbManager = null;
-            connectionString = string.IsNullOrEmpty(connectionString) ?
-                    Environment.GetEnvironmentVariable("MEASUREMENTSDB_CONNECTIONSTRING") :
-                    connectionString;
 
-            if (connectionString == null)
-            {
-                Console.WriteLine("No connection string.");
-            }
-            else
-            {
-                try
-                {
-                    _dbManager = new MongoDatabaseManager(connectionString, "Measurements", "Readings");
-                }
-                catch (Exception e)
-                {
-                    Console.WriteLine($"Measurement service failed to initialize DB connection: {e.Message}");
-                }
-            }
-        }
         public bool IsConnected()
         {
-            return _dbManager != null && _dbManager.IsConnected();
+            bool connected = _dbManager != null && _dbManager.IsConnected();
+            _logger.LogInformation($"Measurement service connected: {connected}");
+            return connected;
         }
 
         public Measurement? GetMeasurement(string sensorId)
         {
+            _logger.LogInformation($"Get Measurement of sensor: {sensorId}");
             if (IsConnected())
             {
                 try
                 {
                     Dictionary<string, string> filters = new Dictionary<string, string>();
                     filters.Add("SensorId", sensorId);
-                    return _dbManager?.GetData<Measurement>(filters);
+                    return _dbManager.GetData(filters);
                 }
                 catch (Exception ex)
                 {
@@ -58,6 +44,7 @@ namespace APV.Service.Services
 
         public bool AddMeasurement(string sensorID, int temp, DateTime? time = null)
         {
+            _logger.LogInformation($"Add Measurement of sensor: {sensorID}, temperature {temp}, time: {time?.ToLongTimeString()}");
             if (IsConnected())
             {
                 if (time == null)

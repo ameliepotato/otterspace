@@ -1,5 +1,8 @@
 using APV.Service.Controllers;
+using APV.Service.Database;
 using APV.Service.Services;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.DependencyInjection;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -10,9 +13,13 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddLogging();
 builder.Services.AddSingleton(sp => sp.GetRequiredService<ILoggerFactory>().CreateLogger("APVServiceLogger"));
-builder.Services.AddScoped<IDbService, MeasurementService>();
 builder.Services.AddScoped<IMeasurementService, MeasurementService>();
-builder.Services.AddScoped<ISensorService, SensorService>();
+builder.Services.AddScoped<ISensorService>( _ => new SensorService(
+                Environment.GetEnvironmentVariable("SENSORSERVICE_CONFIGFILE")));
+builder.Services.AddScoped<IDataManager<Measurement>>( _ => new MongoDatabaseManager<Measurement>(
+                Environment.GetEnvironmentVariable("MEASUREMENTSDB_CONNECTIONSTRING")??"",
+                "Measurements",
+                "Readings"));
 
 var app = builder.Build();
 

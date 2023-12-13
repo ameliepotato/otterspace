@@ -9,19 +9,23 @@ namespace APV.Service.Controllers
     [Route("[controller]")]
     public class ReadingController : ControllerBase
     {
-        private readonly ILogger _logger;
+        private readonly ILogger<ReadingController> _logger;
         private readonly IMeasurementService _measurementService;
         private readonly ISensorService _sensorService;
-        public ReadingController(ILogger logger, ISensorService sensorService, IMeasurementService measurementService)
+        public ReadingController(ILogger<ReadingController> logger, 
+            ISensorService sensorService, 
+            IMeasurementService measurementService)
         {
             _logger = logger;
             _measurementService = measurementService;
             _sensorService = sensorService;
+            _logger.LogInformation("ReadingController created.");
         }
 
         [HttpPost(Name = "SubmitReading")]
         public string Submit(string? id, int? temperature)
         {
+            _logger.LogInformation($"Submitted sensorid {id} and temperature {temperature}");
             try
             {
                 id = id ?? HttpContext.Request.Form["id"];
@@ -54,9 +58,10 @@ namespace APV.Service.Controllers
         [HttpGet(Name = "GetReading")]
         public string Get(string id)
         {
+            _logger.LogInformation($"Getting temperature from sensorid {id}");
             if (string.IsNullOrEmpty(id))
             {
-                return "no id";
+                return "no sensor id";
             }
 
             if (!_sensorService.IsSensorRegistered(id))

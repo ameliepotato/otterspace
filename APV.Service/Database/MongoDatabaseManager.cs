@@ -7,62 +7,38 @@ using System.Reflection.Metadata;
 [assembly: InternalsVisibleTo("APV.Service.Tests.Unit")]
 namespace APV.Service.Database
 {
-    public class MongoDatabaseManager : IDataManager
+    public class MongoDatabaseManager<T> : IDataManager<T>
 
     {
         private IMongoClient? _client { get; }
-        private string? _database { get; }
-        private string? _collection { get; }
-
-        public MongoDatabaseManager(IMongoClient client, string database, string collection)
-        {
-            _client = client;
-            _database = database;
-            _collection = collection;
-        }
+        private string _database { get; }
+        private string _collection { get; }
 
         public MongoDatabaseManager(string connection, string database, string collection)
         {
-            if (string.IsNullOrEmpty(connection))
-            {
-                Console.WriteLine("No connection string");
-                return;
-            }
-
-            if (string.IsNullOrEmpty(database)) 
-            {
-                Console.WriteLine("No database name.");
-                return;
-            }
-
+            _collection = collection;
+            _database = database;
             try
             {
-
                 _client = new MongoClient(connection);
             }
             catch (Exception e)
             {
                 Console.WriteLine($"Connection to mongo failed: {e.Message}");
-                return;
             }
 
             if (_client == null)
             {
                 Console.WriteLine($"Connection was not possible with {connection}");
             }
-            else
-            {
-                _collection = collection;
-                _database = database;
-            }
         }
 
         public bool IsConnected()
         {
-            return _client != null;
+            return _client != null && !string.IsNullOrEmpty(_database) && !string.IsNullOrEmpty(_collection);
         }
 
-        public List<T>? GetManyData<T>(Dictionary<string, string>? filters = null)
+        public List<T>? GetManyData(Dictionary<string, string>? filters = null)
         {
             if (!IsConnected())
             {
@@ -81,7 +57,7 @@ namespace APV.Service.Database
             return null;
         }
 
-        public T? GetData<T>(Dictionary<string, string>? filters = null)
+        public T? GetData(Dictionary<string, string>? filters = null)
         {
             if (!IsConnected())
             {
@@ -104,7 +80,7 @@ namespace APV.Service.Database
             return default(T);
         }
 
-        public bool AddData<T>(T data)
+        public bool AddData(T data)
         {
             try
             {
@@ -125,7 +101,7 @@ namespace APV.Service.Database
             return false;
         }
 
-        public bool AddManyData<T>(List<T> data)
+        public bool AddManyData(List<T> data)
         {
             if(!IsConnected())
             {
