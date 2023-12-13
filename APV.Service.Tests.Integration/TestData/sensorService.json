@@ -1,0 +1,29 @@
+[
+  {
+    "Id": "One",
+    "Name": null,
+    "Position": {
+      "Key": 4,
+      "Value": 5
+    },
+    "Measurement": null
+  },
+  {
+    "Id": "Two",
+    "Name": null,
+    "Position": {
+      "Key": 3,
+      "Value": 4
+    },
+    "Measurement": null
+  },
+  {
+    "Id": "Three",
+    "Name": null,
+    "Position": {
+      "Key": 2,
+      "Value": 5
+    },
+    "Measurement": null
+  }
+]

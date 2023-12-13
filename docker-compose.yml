@@ -35,5 +35,8 @@ services:
             - 37069:80      
         environment:
             - MEASUREMENTSDB_CONNECTIONSTRING=mongodb://admin:Example@measurementsdb:27017/
-            
-
+            - SENSORSERVICE_CONFIGFILE=../sensorService/sensorService.json 
+        volumes:
+            - .\APV.Service.Tests.Integration\TestData\sensorService.json:/sensorService/sensorService.json
+volumes:
+    sensorService:
