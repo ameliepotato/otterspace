@@ -61,7 +61,7 @@ namespace APV.Service.Tests.Unit
                 new Controllers.ReadingController(_loggerController, ss, 
                     new Services.MeasurementService(_loggerService, new MockImplementations.DataManager<Measurement>()));
             // Act
-            string result = controller.Get("Two");
+            string? result = controller.Get("Two");
 
             // Assert
             Assert.AreEqual("no temperature registered yet for Two", result);
@@ -78,10 +78,10 @@ namespace APV.Service.Tests.Unit
                     new Services.MeasurementService(_loggerService, new MockImplementations.DataManager<Measurement>()));
             
             // Act
-            string result = controller.Get("Three");
+            string? result = controller.Get("Three");
 
             // Assert
-            Assert.AreEqual("invalid sensor id", result.ToLower());
+            Assert.AreEqual("invalid sensor id", result?.ToLower());
         }
     }
 }

@@ -60,7 +60,7 @@ namespace APV.Service.Controllers
         }
 
         [HttpGet(Name = "GetReading")]
-        public string Get(string id)
+        public string? Get(string id)
         {
             _logger.LogInformation($"Getting temperature from sensorid {id}");
             if (string.IsNullOrEmpty(id))
@@ -83,7 +83,7 @@ namespace APV.Service.Controllers
             }
 
             _logger.LogInformation($"Temperature from sensorid {id} is {m?.Value.ToString()}");
-            return m.Value.ToString();
+            return m?.Value.ToString();
         }
     }
 }
