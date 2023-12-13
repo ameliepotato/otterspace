@@ -36,9 +36,10 @@ namespace APV.Service.Services
                 }
                 catch (Exception ex)
                 {
-                    Console.WriteLine($"Error when retrieving measurements: {ex.Message}");
+                    _logger.LogError($"Error when retrieving measurements: {ex.Message}");
                 }
             }
+            _logger.LogWarning("No measurement found");
             return null;
         }
 
@@ -54,6 +55,7 @@ namespace APV.Service.Services
                 Measurement measurement = new Measurement(sensorID, temp, time);
                 return _dbManager != null && _dbManager.AddData(measurement);
             }
+            _logger.LogWarning("Not added");
             return false;
         }
     }

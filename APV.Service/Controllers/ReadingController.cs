@@ -25,10 +25,11 @@ namespace APV.Service.Controllers
         [HttpPost(Name = "SubmitReading")]
         public string Submit(string? id, int? temperature)
         {
-            _logger.LogInformation($"Submitted sensorid {id} and temperature {temperature}");
+            _logger.LogInformation($"Submitted sensorid {id} and temperature {temperature} from query parameters");
             try
             {
                 id = id ?? HttpContext.Request.Form["id"];
+                _logger.LogInformation($"Request body sensorid: {id}");
                 if (string.IsNullOrEmpty(id))
                 {
                     return "no id";
@@ -36,21 +37,24 @@ namespace APV.Service.Controllers
 
                 if (!_sensorService.IsSensorRegistered(id))
                 {
+                    _logger.LogInformation($"Sensor {id} is not registered");
                     return "invalid id";
                 }
 
                 temperature = temperature.HasValue ? temperature.Value : Convert.ToInt32(HttpContext.Request.Form["temperature"]);
+
+                _logger.LogInformation($"Temperature for sensor {id} will be set as {temperature}");
 
                 if (!temperature.HasValue)
                 {
                     return "no temperature";
                 }
 
-
                 return _measurementService.AddMeasurement(id, temperature.Value).ToString();
             }
             catch (Exception e)
             {
+                _logger.LogError($"Add measurement failed with error: {e.Message}");
                 return e.Message;
             }
         }
@@ -61,11 +65,13 @@ namespace APV.Service.Controllers
             _logger.LogInformation($"Getting temperature from sensorid {id}");
             if (string.IsNullOrEmpty(id))
             {
+                _logger.LogInformation($"No sensor id");
                 return "no sensor id";
             }
 
             if (!_sensorService.IsSensorRegistered(id))
             {
+                _logger.LogInformation($"Invalid sensor id {id}");
                 return $"invalid sensor id";
             }
 
@@ -76,6 +82,7 @@ namespace APV.Service.Controllers
                 return $"no temperature registered yet for {id}";
             }
 
+            _logger.LogInformation($"Temperature from sensorid {id} is {m?.Value.ToString()}");
             return m.Value.ToString();
         }
     }

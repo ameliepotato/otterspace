@@ -10,32 +10,40 @@ namespace APV.Service.Database
     public class MongoDatabaseManager<T> : IDataManager<T>
 
     {
+        private ILogger<MongoDatabaseManager<T>> _logger;
         private IMongoClient? _client { get; }
         private string _database { get; }
         private string _collection { get; }
 
-        public MongoDatabaseManager(string connection, string database, string collection)
+        public MongoDatabaseManager(ILogger<MongoDatabaseManager<T>> logger, string connection, string database, string collection)
         {
             _collection = collection;
             _database = database;
-            try
+            _logger = logger;
+             try
             {
                 _client = new MongoClient(connection);
             }
             catch (Exception e)
             {
-                Console.WriteLine($"Connection to mongo failed: {e.Message}");
+                _logger.LogError($"Connection to mongo failed: {e.Message}");
             }
 
             if (_client == null)
             {
-                Console.WriteLine($"Connection was not possible with {connection}");
+                _logger.LogError($"Connection was not possible with {connection}");
             }
+            _logger.LogInformation($"Mongo database manager created");
         }
 
         public bool IsConnected()
         {
-            return _client != null && !string.IsNullOrEmpty(_database) && !string.IsNullOrEmpty(_collection);
+            bool isConnected = _client != null && !string.IsNullOrEmpty(_database) && !string.IsNullOrEmpty(_collection);
+            if(!isConnected)
+            {
+                _logger.LogWarning($"Mongo database manager client is not connected for database {_database} and collection {_collection}");
+            }
+            return isConnected;
         }
 
         public List<T>? GetManyData(Dictionary<string, string>? filters = null)
@@ -54,6 +62,7 @@ namespace APV.Service.Database
             {
                 return readingsCollection.Find(filter)?.ToList<T>();
             }
+            _logger.LogWarning($"Did not find data.");
             return null;
         }
 
@@ -74,14 +83,17 @@ namespace APV.Service.Database
                 List<T> results = readingsCollection.Find(filter).ToList();
                 if (results!= null && results.Count > 0)
                 {
+                    _logger.LogInformation($"Found {results.Count} results");
                     return results.First();
                 }
             }
+            _logger.LogWarning("No data found.");
             return default(T);
         }
 
         public bool AddData(T data)
         {
+            _logger.LogInformation($"Adding data {data?.ToString()}");
             try
             {
                 if (data != null && IsConnected())
@@ -96,13 +108,14 @@ namespace APV.Service.Database
             }
             catch(Exception e)
             {
-                Console.WriteLine($"Add data failed with error: {e.Message}");
+                _logger.LogError($"Add data failed with error: {e.Message}");
             }
             return false;
         }
 
         public bool AddManyData(List<T> data)
         {
+            _logger.LogInformation($"Adding data {data?.Count} sets");
             if(!IsConnected())
             {
                 return false;
@@ -118,7 +131,7 @@ namespace APV.Service.Database
             }
             catch (Exception e)
             {
-                Console.WriteLine($"Add data failed with error: {e.Message}");
+                _logger.LogError($"Add data failed with error: {e.Message}");
             }
             return false;
         }
