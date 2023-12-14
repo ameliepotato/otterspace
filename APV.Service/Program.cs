@@ -17,7 +17,6 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddLogging();
-builder.Services.AddSingleton(sp => sp.GetRequiredService<ILoggerFactory>().CreateLogger("APVServiceLogger"));
 builder.Services.AddScoped<IMeasurementService, MeasurementService>();
 builder.Services.AddScoped<ISensorService>( _ => new SensorService(
                 logFactory.CreateLogger<SensorService>(),

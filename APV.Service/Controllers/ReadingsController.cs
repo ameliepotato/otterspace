@@ -20,7 +20,7 @@ namespace APV.Service.Controllers
             _logger = logger;
             _measurementService = measurementService;
             _sensorService = sensorService;
-            _logger.LogInformation("ReadingController created.");
+            _logger.LogInformation("Readings controller created.");
         }
 
         [HttpPost(Name = "SubmitReading")]
@@ -63,17 +63,16 @@ namespace APV.Service.Controllers
         [HttpGet(Name = "GetReadings")]
         public string? GetReadings()
         {
-            _logger.LogInformation($"Getting measurements");
-            List<Measurement>? m = _measurementService.GetMeasurements();
+            _logger.LogInformation($"Getting readings");
+            List<Reading> readings = new List<Reading>();
 
+            List<Measurement>? m = _measurementService.GetMeasurements();
             if (m == null || m.Count < 1)
             {
                 return $"no measurements registered yet";
             }
 
             _logger.LogInformation($"Measurements retrieved: {m.Count}");
-            
-            List<Reading> readings = new List<Reading>();
             _logger.LogInformation($"Getting sensors");
             
             foreach(Measurement measurement in m)
