@@ -1,4 +1,4 @@
-﻿namespace APV.Service.Database
+﻿namespace APV.Service.Services
 {
     public interface IDataManager<T>
     {

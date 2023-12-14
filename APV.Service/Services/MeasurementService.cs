@@ -1,6 +1,4 @@
-﻿using APV.Service.Database;
-
-namespace APV.Service.Services
+﻿namespace APV.Service.Services
 {
     public class MeasurementService : IMeasurementService
     {
