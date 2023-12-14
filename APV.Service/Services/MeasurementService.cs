@@ -1,11 +1,8 @@
 ﻿using APV.Service.Database;
-using MongoDB.Bson.Serialization.IdGenerators;
-using MongoDB.Driver.Core.Configuration;
-using System.Globalization;
 
 namespace APV.Service.Services
 {
-    public class MeasurementService : IDbService, IMeasurementService
+    public class MeasurementService : IMeasurementService
     {
         private readonly ILogger<MeasurementService> _logger;
         private IDataManager<Measurement> _dbManager { get; set; }
@@ -13,8 +10,8 @@ namespace APV.Service.Services
         public MeasurementService(ILogger<MeasurementService> logger, IDataManager<Measurement> dataManager)
         {
             _logger = logger;
-            _logger.LogInformation($"Measurement service created and is connected: {dataManager.IsConnected()}");
             _dbManager = dataManager;
+            _logger.LogInformation($"Measurement service created");
         }
 
         public bool IsConnected()

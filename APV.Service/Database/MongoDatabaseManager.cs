@@ -7,7 +7,7 @@ using System.Reflection.Metadata;
 [assembly: InternalsVisibleTo("APV.Service.Tests.Unit")]
 namespace APV.Service.Database
 {
-    public class MongoDatabaseManager<T> : IDataManager<T>
+    public class MongoDatabaseManager<T> : IDataManager<T>, IDbService
 
     {
         private ILogger<MongoDatabaseManager<T>> _logger;
@@ -32,6 +32,10 @@ namespace APV.Service.Database
             if (_client == null)
             {
                 _logger.LogError($"Connection was not possible with {connection}");
+            }
+            else
+            {
+                CreateIndex();
             }
             _logger.LogInformation($"Mongo database manager created");
         }
@@ -132,6 +136,26 @@ namespace APV.Service.Database
             catch (Exception e)
             {
                 _logger.LogError($"Add data failed with error: {e.Message}");
+            }
+            return false;
+        }
+
+        public bool CreateIndex()
+        {
+            string index = "";
+            _logger.LogInformation($"Creating index on database {_database}, collection {_collection}.");
+            try
+            {
+                var database = _client.GetDatabase(_database);
+                var collection = database.GetCollection<Measurement>(_collection);
+                var indexKeysDefinition = Builders<Measurement>.IndexKeys.Ascending(m => m.SensorId).Descending(m => m.Time);
+                index = collection.Indexes.CreateOne(new CreateIndexModel<Measurement>(indexKeysDefinition));
+                _logger.LogInformation($"Index {index} was created");
+                return true;
+            }
+            catch (Exception e)
+            {
+                _logger.LogWarning($"Index {index} creation failed with error: {e.Message}");
             }
             return false;
         }

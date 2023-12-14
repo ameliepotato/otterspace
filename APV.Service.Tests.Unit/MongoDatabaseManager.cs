@@ -59,5 +59,21 @@ namespace APV.Service.Tests.Unit
             Assert.IsTrue(measurements.Any());
             Assert.AreEqual(2, measurements.Count());
         }
+
+
+        [TestMethod]
+        public void CreateIndexSuccesful()
+        {
+            Database.MongoDatabaseManager<Measurement> manager =
+               new Database.MongoDatabaseManager<Measurement>(
+                   _loggerManager, "mongodb://admin:Example@localhost:27017", "Tests", "Integration" + DateTime.Now.Ticks.ToString());
+
+            Assert.IsNotNull(manager);
+            Assert.IsTrue(manager.IsConnected());
+
+            bool result = manager.CreateIndex();
+
+            Assert.IsTrue(result);
+        }
     }
 }
