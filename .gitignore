@@ -18,3 +18,6 @@
 /packages
 /APV.Service.Tests.Unit/bin/Debug
 /APV.Service/bin/Debug/net7.0
+/APV.Console.Tests.UI/bin/Debug/net7.0
+/APV.Console.Tests.UI/obj
+/APV.Console.Tests.Unit/obj
