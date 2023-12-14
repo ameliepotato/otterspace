@@ -38,5 +38,18 @@ services:
             - SENSORSERVICE_CONFIGFILE=../sensorService/sensorService.json 
         volumes:
             - .\APV.Service.Tests.Integration\TestData\sensorService.json:/sensorService/sensorService.json
+
+    apvconsole:
+        container_name: apvconsole
+        build:
+            context: .
+            dockerfile: ./APV.Console/Dockerfile
+        depends_on: 
+            - apvservice
+        ports:
+            - 37070:80      
+        environment:
+            - APVSERVICE_HOST=http://localhost:37069
+
 volumes:
     sensorService:
