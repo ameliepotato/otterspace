@@ -2,7 +2,7 @@
 {
     public interface ISensorService
     {
-        public abstract bool IsSensorRegistered(string id);
+        public abstract Sensor? FindSensor(string id);
         public abstract int SensorCount();
 
     }

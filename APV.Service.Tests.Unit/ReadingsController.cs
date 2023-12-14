@@ -8,7 +8,8 @@ namespace APV.Service.Tests.Unit
     public class ReadingsController
     {
         protected ILogger<Controllers.ReadingsController> _loggerController;
-        protected ILogger<Services.MeasurementService> _loggerService;
+        protected ILogger<Services.MeasurementService> _loggerMeasurementsService;
+        protected ILogger<Services.SensorService> _loggerSensorService;
 
 
         [TestInitialize]
@@ -16,7 +17,8 @@ namespace APV.Service.Tests.Unit
         {
             var loggerFactory = (ILoggerFactory)new LoggerFactory();
             _loggerController = loggerFactory.CreateLogger<Controllers.ReadingsController>();
-            _loggerService = loggerFactory.CreateLogger<Services.MeasurementService>();
+            _loggerMeasurementsService = loggerFactory.CreateLogger<Services.MeasurementService>();
+            _loggerSensorService = loggerFactory.CreateLogger<Services.SensorService>();
         }
 
 
@@ -25,9 +27,9 @@ namespace APV.Service.Tests.Unit
         {
             // Arrange
             string filePath = Directory.GetCurrentDirectory() + "\\..\\..\\..\\TestData\\ValidSensorService.json";
-            Services.SensorService ss = new Service.Services.SensorService(filePath);
+            Services.SensorService ss = new Service.Services.SensorService(_loggerSensorService, filePath);
             Controllers.ReadingsController controller = new Controllers.ReadingsController(_loggerController, ss, 
-                new Services.MeasurementService(_loggerService, new MockImplementations.DataManager<Measurement>()));
+                new Services.MeasurementService(_loggerMeasurementsService, new MockImplementations.DataManager<Measurement>()));
             // Act
             string result = controller.SubmitReading("Two", 3);
 
@@ -40,10 +42,10 @@ namespace APV.Service.Tests.Unit
         {
             // Arrange
             string filePath = Directory.GetCurrentDirectory() + "\\..\\..\\..\\TestData\\ValidSensorService.json";
-            Services.SensorService ss = new Services.SensorService(filePath);
+            Services.SensorService ss = new Services.SensorService(_loggerSensorService, filePath);
             Controllers.ReadingsController controller = 
                 new Controllers.ReadingsController(_loggerController, ss, 
-                    new Services.MeasurementService(_loggerService, new MockImplementations.DataManager<Measurement>()));
+                    new Services.MeasurementService(_loggerMeasurementsService, new MockImplementations.DataManager<Measurement>()));
             // Act
             string result = controller.SubmitReading("Three", 3);
 
@@ -55,10 +57,10 @@ namespace APV.Service.Tests.Unit
         public void GetReadingSuccessNoReadings()
         {
             // Arrange
-            Services.SensorService ss = new Service.Services.SensorService(null);
+            Services.SensorService ss = new Service.Services.SensorService(_loggerSensorService);
             Controllers.ReadingsController controller = 
                 new Controllers.ReadingsController(_loggerController, ss, 
-                    new Services.MeasurementService(_loggerService, new MockImplementations.DataManager<Measurement>()));
+                    new Services.MeasurementService(_loggerMeasurementsService, new MockImplementations.DataManager<Measurement>()));
             // Act
             string? result = controller.GetReadings();
 

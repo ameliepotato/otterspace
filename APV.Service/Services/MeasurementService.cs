@@ -9,6 +9,7 @@ namespace APV.Service.Services
     {
         private readonly ILogger<MeasurementService> _logger;
         private IDataManager<Measurement> _dbManager { get; set; }
+
         public MeasurementService(ILogger<MeasurementService> logger, IDataManager<Measurement> dataManager)
         {
             _logger = logger;
@@ -60,7 +61,7 @@ namespace APV.Service.Services
 
         public bool AddMeasurement(string sensorID, int temp, DateTime? time = null)
         {
-            _logger.LogInformation($"Add Measurement of sensor: {sensorID}, temperature {temp}, time: {time?.ToLongTimeString()}");
+            _logger.LogInformation($"Add Measurement of sensor: {sensorID}, temperature {temp}, time: {time?.ToString()}");
             if (IsConnected())
             {
                 if (time == null)
@@ -68,7 +69,7 @@ namespace APV.Service.Services
                     time = DateTime.Now;
                 }
                 Measurement measurement = new Measurement(sensorID, temp, time);
-                _logger.LogInformation($"Add Measurement of sensor: {sensorID}, temperature {temp}, time: {time?.ToLongTimeString()}");
+                _logger.LogInformation($"Add Measurement of sensor: {sensorID}, temperature {temp}, time: {time?.ToString()}");
                 return _dbManager != null && _dbManager.AddData(measurement);
             }
             _logger.LogWarning("Not added");

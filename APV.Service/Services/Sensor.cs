@@ -2,7 +2,7 @@
 {
     public class Sensor
     {
-        public Sensor(string id, KeyValuePair<int, int> position, string? name)
+        public Sensor(string id, Tuple<int, int> position, string? name)
         {
             Id = id;
             Position = position;
@@ -13,7 +13,7 @@
 
         public string? Name { get; set; }
 
-        public KeyValuePair<int, int> Position { get; set; }
+        public Tuple<int, int> Position { get; set; }
 
     }
 }

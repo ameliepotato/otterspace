@@ -7,7 +7,10 @@ using Microsoft.Extensions.Logging;
 
 var builder = WebApplication.CreateBuilder(args);
 
-var logFactory = new LoggerFactory();
+using var logFactory = LoggerFactory.Create(builder =>
+{
+    builder.AddConsole();
+});
 
 // Add services to the container.
 builder.Services.AddControllers();
@@ -17,6 +20,7 @@ builder.Services.AddLogging();
 builder.Services.AddSingleton(sp => sp.GetRequiredService<ILoggerFactory>().CreateLogger("APVServiceLogger"));
 builder.Services.AddScoped<IMeasurementService, MeasurementService>();
 builder.Services.AddScoped<ISensorService>( _ => new SensorService(
+                logFactory.CreateLogger<SensorService>(),
                 Environment.GetEnvironmentVariable("SENSORSERVICE_CONFIGFILE")));
 builder.Services.AddScoped<IDataManager<Measurement>>( _ => new MongoDatabaseManager<Measurement>(
                 logFactory.CreateLogger<MongoDatabaseManager<Measurement>>(),      

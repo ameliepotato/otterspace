@@ -36,7 +36,7 @@ namespace APV.Service.Controllers
                     return "no sensor id";
                 }
 
-                if (!_sensorService.IsSensorRegistered(sensorid))
+                if (_sensorService.FindSensor(sensorid) == null)
                 {
                     _logger.LogInformation($"Sensor {sensorid} is not registered");
                     return "invalid sensor id";
@@ -64,7 +64,6 @@ namespace APV.Service.Controllers
         public string? GetReadings()
         {
             _logger.LogInformation($"Getting measurements");
-            
             List<Measurement>? m = _measurementService.GetMeasurements();
 
             if (m == null || m.Count < 1)
@@ -73,7 +72,31 @@ namespace APV.Service.Controllers
             }
 
             _logger.LogInformation($"Measurements retrieved: {m.Count}");
-            return JsonSerializer.Serialize(m);
+            
+            List<Reading> readings = new List<Reading>();
+            _logger.LogInformation($"Getting sensors");
+            
+            foreach(Measurement measurement in m)
+            {
+                Sensor? sensor = _sensorService.FindSensor(measurement.SensorId);
+                if(sensor == null)
+                {
+                    _logger.LogWarning($"Sensor {measurement.SensorId} not registered");
+                }
+                else
+                {
+                    Reading reading = new Reading() {
+                        SensorId = measurement.SensorId,
+                        PositionX = sensor.Position.Item1,
+                        PositionY = sensor.Position.Item2,
+                        Value = measurement.Value,
+                        Time = measurement.Time??DateTime.MinValue
+                    };
+                    readings.Add(reading);
+                }
+            }
+            _logger.LogInformation($"Found {readings.Count} readings");
+            return JsonSerializer.Serialize(readings);
         }
     }
 }

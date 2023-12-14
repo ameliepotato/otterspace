@@ -3,32 +3,32 @@
     "Id": "One",
     "Name": null,
     "Position": {
-      "Key": 4,
-      "Value": 5
+      "Item1": 4,
+      "Item2": 5
     }
   },
   {
     "Id": "Two",
     "Name": null,
     "Position": {
-      "Key": 3,
-      "Value": 4
+      "Item1": 3,
+      "Item2": 4
     }
   },
   {
     "Id": "Three",
     "Name": null,
     "Position": {
-      "Key": 2,
-      "Value": 5
+      "Item1": 2,
+      "Item2": 5
     }
   },
   {
     "Id": "Five",
     "Name": null,
     "Position": {
-      "Key": 2,
-      "Value": 5
+      "Item1": 2,
+      "Item2": 5
     }
   }
 ]
