@@ -1,7 +1,12 @@
+using APV.Console;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddRazorPages();
+
+builder.Services.AddScoped<IReadingsManager>(_ => 
+    new ReadingsManager(Environment.GetEnvironmentVariable("READINGSMANAGER_URL") ?? ""));
 
 var app = builder.Build();
 
