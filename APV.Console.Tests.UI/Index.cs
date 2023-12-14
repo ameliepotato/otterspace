@@ -3,7 +3,7 @@ using OpenQA.Selenium.Chrome;
 namespace APV.Console.Tests.UI
 {
     [TestFixture]
-    public class IndexPage: Page
+    public class Index: Page
     {
         [Test]
         public void LoadPlanPictureSuccesful()

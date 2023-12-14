@@ -7,7 +7,6 @@ using System.Threading.Tasks;
 
 namespace APV.Console.Tests.UI
 {
-    [TestFixture]
     public class Page
     {
         protected IWebDriver _webDriver;
