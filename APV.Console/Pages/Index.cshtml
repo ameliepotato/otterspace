@@ -9,5 +9,29 @@
     <p>
          Configure your lovely home with APV!
     </p>
+    <br/>
+    <br/>
+    @{
+        if (Model.Readings != null && Model.Readings.Count > 0)
+        {
+            <table id="readings" align="center">
+            <tr>
+                <th>Sensor</th>
+                <th>Temperature</th>
+                <th>Date</th>
+                <th>Position</th>
+            </tr>
+            @foreach(ReadingModel reading in Model.Readings)
+            {
+                <tr id="@HtmlEncoder.Encode(reading.SensorId)">
+                    <td>@reading.SensorId</td>
+                    <td>@reading.Value</td>
+                    <td>@reading.Time</td>
+                    <td>@reading.PositionX, @reading.PositionY</td>
+                </tr>
+            } 
+            </table>
+        }
+    }
     <img id="plan" src="./plan.jpg">
 </div>

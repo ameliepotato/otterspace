@@ -14,5 +14,15 @@ namespace APV.Console.Tests.UI
             IWebElement element = links[0];
             Assert.That(element.TagName, Is.EqualTo("img"));
         }
+
+        [Test]
+        public void LoadReadingsSuccesful()
+        {
+            _webDriver.Url = "http://localhost:37070/";
+            List<IWebElement> links = _webDriver.FindElements(By.Id("readings")).ToList();
+            Assert.That(links.Count, Is.EqualTo(1));
+            IWebElement element = links[0];
+            Assert.That(element.TagName, Is.EqualTo("table"));
+        }
     }
 }

@@ -5,8 +5,16 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddRazorPages();
 
+using var logFactory = LoggerFactory.Create(builder =>
+{
+    builder.AddConsole();
+    builder.AddDebug();
+});
+
+builder.Services.AddLogging();
+
 builder.Services.AddScoped<IReadingsManager>(_ => 
-    new ReadingsManager(Environment.GetEnvironmentVariable("READINGSMANAGER_URL") ?? ""));
+    new ReadingsManager(logFactory.CreateLogger<ReadingsManager>()));
 
 var app = builder.Build();
 
