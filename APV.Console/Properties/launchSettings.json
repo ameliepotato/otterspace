@@ -14,7 +14,8 @@
       "launchBrowser": true,
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development",
-        "APVCONSOLE_READINGMANAGER_URL_CONSOLEINTEGRATIONTESTS": "http://localhost:37010/"
+        "APVCONSOLE_READINGMANAGER_URL_CONSOLEINTEGRATIONTESTS": "http://localhost:37010/",
+        "APVCONSOLE_READINGMANAGER_URL": "http://localhost:37069/Readings/"
       }
     },
     "Docker": {

@@ -29,13 +29,11 @@ namespace APV.Console.Tests.Integration
                     $"http://{IPREADINGSSERVICE}:{PORTREADINGSSERVICE}/", data);
             });
             _webDriver.Url = $"http://{IPWEBSITE}:{PORTWEBSITE}";
-            IWebElement element = _webDriver.FindElement(By.Id("readings"));
-            List<IWebElement>? rows = element.FindElements(By.XPath("(.//*)[1]"))?.ToList();
-            Assert.That(rows, Is.Not.Null);
-            Assert.That(rows.Count(), Is.EqualTo(1));
+            IWebElement myReading = _webDriver.FindElement(By.Id("Fake"));
+            List<IWebElement>? allReadings = _webDriver.FindElements(By.ClassName("overlay-text"))?.ToList();
 
-            element = element.FindElement(By.Id("Fake"));
-            Assert.That(element, Is.Not.Null);
+            Assert.That(allReadings, Is.Not.Null);
+            Assert.That(allReadings.Count(), Is.EqualTo(1));
         }
     }
 }
