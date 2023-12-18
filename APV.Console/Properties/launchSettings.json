@@ -13,7 +13,8 @@
       "commandName": "IISExpress",
       "launchBrowser": true,
       "environmentVariables": {
-        "ASPNETCORE_ENVIRONMENT": "Development"
+        "ASPNETCORE_ENVIRONMENT": "Development",
+        "APVCONSOLE_READINGMANAGER_URL_CONSOLEINTEGRATIONTESTS": "http://localhost:37010/"
       }
     },
     "Docker": {

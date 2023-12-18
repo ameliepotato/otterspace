@@ -5,8 +5,19 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddRazorPages();
 
+using var logFactory = LoggerFactory.Create(builder =>
+{
+    builder.AddConsole();
+    builder.AddDebug();
+});
+
+builder.Services.AddLogging();
+
 builder.Services.AddScoped<IReadingsManager>(_ => 
-    new ReadingsManager(Environment.GetEnvironmentVariable("READINGSMANAGER_URL") ?? ""));
+    new ReadingsManager(logFactory.CreateLogger<ReadingsManager>(), 
+        Environment.GetEnvironmentVariable("APVCONSOLE_READINGMANAGER_URL") ??
+            Environment.GetEnvironmentVariable("APVCONSOLE_READINGMANAGER_URL_CONSOLEINTEGRATIONTESTS") ??
+                ""));
 
 var app = builder.Build();
 

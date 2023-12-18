@@ -15,7 +15,7 @@ namespace APV.Console.Tests.UI
         public void Setup()
         {
             string driverPath = Environment.GetEnvironmentVariable("CHROMEDRIVERPATH_UITESTS") ??
-                Directory.GetCurrentDirectory() + Path.DirectorySeparatorChar + "Drivers";
+                    Directory.GetCurrentDirectory() + Path.DirectorySeparatorChar + "Drivers";
             _webDriver = new ChromeDriver(driverPath);
         }
 
