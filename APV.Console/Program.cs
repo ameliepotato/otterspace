@@ -14,7 +14,10 @@ using var logFactory = LoggerFactory.Create(builder =>
 builder.Services.AddLogging();
 
 builder.Services.AddScoped<IReadingsManager>(_ => 
-    new ReadingsManager(logFactory.CreateLogger<ReadingsManager>()));
+    new ReadingsManager(logFactory.CreateLogger<ReadingsManager>(), 
+        Environment.GetEnvironmentVariable("APVCONSOLE_READINGMANAGER_URL") ??
+            Environment.GetEnvironmentVariable("APVCONSOLE_READINGMANAGER_URL_CONSOLEINTEGRATIONTESTS") ??
+                ""));
 
 var app = builder.Build();
 

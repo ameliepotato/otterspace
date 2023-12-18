@@ -3,15 +3,11 @@ using System.Net;
 using System.Net.Sockets;
 using System.Text;
 using System.Text.Json;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace APV.Console.Tests.Integration
 {
     public class Index : WebTest
     {
-        private const int PORT = 37069;
-        private const string IP = "127.0.0.1";  
-        
         [Test]
         public void ReadingsSuccesful()
         {
@@ -29,7 +25,8 @@ namespace APV.Console.Tests.Integration
             string data = JsonSerializer.Serialize(list);
             Task task = Task.Run(() =>
             {
-                Tools.Server.StartListeningOnAndRespondWith($"http://{IP}:{PORT}/Readings/", data);
+                Tools.Server.StartListeningOnAndRespondWith(
+                    $"http://{IPREADINGSSERVICE}:{PORTREADINGSSERVICE}/", data);
             });
             _webDriver.Url = $"http://{IPWEBSITE}:{PORTWEBSITE}";
             IWebElement element = _webDriver.FindElement(By.Id("readings"));

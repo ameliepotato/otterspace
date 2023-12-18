@@ -9,18 +9,17 @@ namespace APV.Console
     public class ReadingsManager : IReadingsManager
     {
         private readonly ILogger<ReadingsManager> _logger;
-        static readonly HttpClient _httpClient = new HttpClient();
-
-        public ReadingsManager(ILogger<ReadingsManager> logger)
+        private string _url;
+        public ReadingsManager(ILogger<ReadingsManager> logger, string url)
         {
             _logger = logger;
+            _url = url;
             _logger.LogInformation("ReadingsManager created");
         }
 
         public List<ReadingModel>? GetReadings()
         {
-            string? url = Environment.GetEnvironmentVariable("APVCONSOLE_READINGMANAGER_URL");                ;
-
+            var url = _url;
             if (string.IsNullOrEmpty(url))
             {
                 _logger.LogError($"No url to get readings from");
@@ -29,27 +28,30 @@ namespace APV.Console
 
             _logger.LogInformation($"Getting readings from {url}");
             List<ReadingModel>? readings = null;
-            try
+            using (var httpClient = new HttpClient())
             {
-                Task<string> call = _httpClient.GetStringAsync(url);
-                call.Wait();
-                if (call.IsCompletedSuccessfully)
-                {
-                    readings = JsonSerializer.Deserialize<List<ReadingModel>>(call.Result) ??
-                        new List<ReadingModel>();
+                try
+                { 
+                    Task<string> call = httpClient.GetStringAsync(url);
+                    call.Wait();
+                    if (call.IsCompletedSuccessfully)
+                    {
+                        readings = JsonSerializer.Deserialize<List<ReadingModel>>(call.Result) ??
+                            new List<ReadingModel>();
+                    }
+                    else
+                    {
+                        _logger.LogError($"Getting readings from {url} failed with error: {call.Result}");
+                    }
                 }
-                else
+                catch (TaskCanceledException cancelled)
                 {
-                    _logger.LogError($"Getting readings from {url} failed with error: {call.Result}");
+                    _logger.LogError($"Getting readings from {url} was cancelled. Error: {cancelled.Message}");
                 }
-            }
-            catch(TaskCanceledException cancelled)
-            {
-                _logger.LogError($"Getting readings from {url} was cancelled. Error: {cancelled.Message}");
-            }
-            catch(Exception e)
-            {
-                _logger.LogError($"Getting readings from {url} failed with error {e.Message}");
+                catch (Exception e)
+                {
+                    _logger.LogError($"Getting readings from {url} failed with error {e.Message}");
+                }
             }
             _logger.LogInformation($"Returning {readings?.Count} readings");
             return readings;
