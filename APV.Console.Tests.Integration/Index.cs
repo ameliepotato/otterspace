@@ -35,5 +35,22 @@ namespace APV.Console.Tests.Integration
             Assert.That(allReadings, Is.Not.Null);
             Assert.That(allReadings.Count(), Is.EqualTo(1));
         }
+
+        [Test]
+        public void NoReadingsErrorMessageAppers()
+        {
+            string data = JsonSerializer.Serialize(new List<object>());
+            Task task = Task.Run(() =>
+            {
+                Tools.Server.StartListeningOnAndRespondWith(
+                    $"http://{IPREADINGSSERVICE}:{PORTREADINGSSERVICE}/", data);
+            });
+            _webDriver.Url = $"http://{IPWEBSITE}:{PORTWEBSITE}";
+            IWebElement myReading = _webDriver.FindElement(By.Id("error"));
+            Assert.That(myReading, Is.Not.Null);
+            List<IWebElement>? allReadings = _webDriver.FindElements(By.ClassName("overlay-text"))?.ToList();
+            Assert.That(allReadings, Is.Not.Null);
+            Assert.That(allReadings.Count, Is.EqualTo(0));  
+        }
     }
 }
