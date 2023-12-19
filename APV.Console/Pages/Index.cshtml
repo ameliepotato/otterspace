@@ -1,37 +1,28 @@
 ﻿@page
 @model IndexModel
 @{
-    ViewData["Title"] = "Home page";
+    ViewData["Title"] = "Home Temperatures";
 }
-
 <div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>
-         Configure your lovely home with APV!
-    </p>
-    <br/>
-    <br/>
-    @{
-        if (Model.Readings != null && Model.Readings.Count > 0)
-        {
-            <table id="readings" align="center">
-            <tr>
-                <th>Sensor</th>
-                <th>Temperature</th>
-                <th>Date</th>
-                <th>Position</th>
-            </tr>
-            @foreach(ReadingModel reading in Model.Readings)
+    @if (Model.Readings != null && Model.Readings.Count > 0)
+    {
+        <p>Average temperature:</p>
+        <h1 style="color: @(Model.AverageTemp()?.ColorCode)">@Html.Encode(Model.AverageTemp()?.Value)&deg;</h1>
+        <br />
+        <div class="image-container">
+            <img src="~/plan.jpg" id="planImg" alt="floor plan image">
+            @foreach (var reading in Model.Readings)
             {
-                <tr id="@HtmlEncoder.Encode(reading.SensorId)">
-                    <td>@reading.SensorId</td>
-                    <td>@reading.Value</td>
-                    <td>@reading.Time</td>
-                    <td>@reading.PositionX, @reading.PositionY</td>
-                </tr>
-            } 
-            </table>
-        }
+                <div id="@Html.Encode(@reading.SensorId)" class="overlay-text"
+                     style="left: @Html.Encode(reading.PositionX)px; top: @Html.Encode(reading.PositionY)px; background-color: @reading.ColorCode">
+                    @Html.Encode(@reading.Value)&deg;
+                </div>
+            }
+        </div>
     }
-    <img id="plan" src="./plan.jpg">
+    else
+    {
+        <p id="error">No readings recorded yet.</p>
+        <img src="~/plan.jpg" id="planImg" alt="floor plan image">
+    }
 </div>

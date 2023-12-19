@@ -18,7 +18,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "APV.Console.Tests.UI", "APV.Console.Tests.UI\APV.Console.Tests.UI.csproj", "{532F98EF-B3E4-4275-842B-35E9A48ED16D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "APV.Console.Tests.Integration", "APV.Console.Tests.Integration\APV.Console.Tests.Integration.csproj", "{730316BD-CC67-406B-9CA2-57660984D070}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "APV.Console.Tests.Integration", "APV.Console.Tests.Integration\APV.Console.Tests.Integration.csproj", "{730316BD-CC67-406B-9CA2-57660984D070}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "APV.Console.Tests.Unit", "APV.Console.Tests.Unit\APV.Console.Tests.Unit.csproj", "{B7529A7B-8896-4874-B5B9-40F2275E48B0}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -50,6 +52,10 @@ Global
 		{730316BD-CC67-406B-9CA2-57660984D070}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{730316BD-CC67-406B-9CA2-57660984D070}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{730316BD-CC67-406B-9CA2-57660984D070}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B7529A7B-8896-4874-B5B9-40F2275E48B0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B7529A7B-8896-4874-B5B9-40F2275E48B0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B7529A7B-8896-4874-B5B9-40F2275E48B0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B7529A7B-8896-4874-B5B9-40F2275E48B0}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

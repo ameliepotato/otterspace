@@ -20,27 +20,23 @@ db.Readings.insertOne(
     { _id:"1", SensorId: "One", Value: -10, Time: new Date() }
 );
 db.Readings.insertOne(
-    { _id: "2", SensorId: "Two", Value: 30,  Time: new Date()}
+    { _id: "2", SensorId: "Two", Value: -30,  Time: new Date()}
+
 );
 db.Readings.insertOne(
-    { _id: "4", SensorId: "Two", Value: 0,  Time: new Date("2022-10-03") }
-);
-
-
-db.Readings.insertOne(
-    { _id: "5", SensorId: "Five", Value: 22,  Time: new Date("2022-10-05") }
+    { _id: "5", SensorId: "Five", Value: -22,  Time: new Date() }
 );
 
 db.Readings.insertOne(
-    { _id: "7", SensorId: "Six", Value: 43,  Time: new Date() }
+    { _id: "7", SensorId: "Six", Value: 23,  Time: new Date() }
 );
 db.Readings.insertOne(
-    { _id: "8", SensorId: "Seven", Value: -25,  Time: new Date("2021-10-05") }
+    { _id: "8", SensorId: "Seven", Value: -25,  Time: new Date() }
 );
 
 
 db.Readings.insertOne(
-    { _id: "10", SensorId: "Eight", Value: 35,  Time: new Date("2021-10-05") }
+    { _id: "10", SensorId: "Eight", Value: 35,  Time: new Date() }
 );
 
 
