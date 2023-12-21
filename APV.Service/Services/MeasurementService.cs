@@ -16,68 +16,23 @@ namespace APV.Service.Services
             _logger.LogInformation($"Measurement service created and is connected to db: {dataManager.IsConnected()}");
         }
 
-        public List<Measurement>? GetMeasurements(string? sensorId = null,
-            DateTime? from = null, DateTime? to = null, bool descending = true)
+        public List<Measurement>? GetAllLatestMeasurements()
         {
-            _logger.LogInformation($"Get Measurements");
+            _logger.LogInformation($"Get all latest measurements");
 
             try
             {
                 List<Measurement>? measurements = new List<Measurement>();
                 var readingsCollection = _dataManager.GetCollection<Measurement>();
-                _logger.LogInformation($"Filter: matching SensorId {sensorId}");
                 List<BsonDocument> pipeline = new List<BsonDocument>();
-
-                if (string.IsNullOrEmpty(sensorId))
-                {
-                    //sensorId = "*";
-                }
-
-
-                if (!to.HasValue)
-                {
-                    to = DateTime.MaxValue;
-                }
-
-                _logger.LogInformation($"Filter: time <= {to}");
-
-                if (!from.HasValue)
-                {
-                    from = DateTime.MinValue;
-                }
-
-                to = to?.ToUniversalTime();
-                from = from?.ToUniversalTime();
-                
-                _logger.LogInformation($"Filter: time >= {from}");
-
-                var filtered = readingsCollection?.AsQueryable()?
-                                    .Where(m =>
-                                        m.Time <= to &&
-                                        m.Time >= from &&
-                                        (string.IsNullOrEmpty(sensorId) ?
-                                            m.SensorId.Length > 0 :
-                                            m.SensorId == sensorId));
-
-                if(descending)
-                {
-                    filtered = filtered?.OrderByDescending(m => m.Time);
-                }
-
-                if(string.IsNullOrEmpty(sensorId))
-                {
-                    filtered = filtered?.GroupBy(m => m.SensorId)?.Select(x => x.First());
-                }
+               
+                var filtered = readingsCollection?.AsQueryable()?.OrderByDescending(m => m.Time)?
+                    .GroupBy(m => m.SensorId)?.Select(x => x.First());
 
                 measurements = filtered?.ToList();
 
                 if (measurements != null)
                 {
-                    if (descending)
-                    {
-                        _logger.LogInformation($"Filter: Descending");
-                        measurements = measurements.OrderByDescending(x => x.Time).ToList();
-                    }
                     _logger.LogInformation($"Found {measurements.Count} results");
                 }
                 else

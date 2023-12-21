@@ -61,7 +61,7 @@ namespace APV.Service.Tests.Unit
                 new Controllers.ReadingsController(_loggerController, ss, 
                     new MockImplementations.MeasurementService(new List<Services.Measurement>()));
             // Act
-            string? result = controller.GetReadings();
+            string? result = controller.GetAllLatest();
 
             // Assert
             Assert.AreEqual("no measurements registered yet", result);
@@ -90,7 +90,7 @@ namespace APV.Service.Tests.Unit
 
             Assert.AreEqual("true", result.ToLower());
 
-            result = controller.GetReadings(sensorID, 1);
+            result = controller.GetAllLatest();
 
             Assert.IsTrue(result.Contains(expectedResult));
         }

@@ -24,9 +24,9 @@ namespace APV.Service.Controllers
         }
 
         [HttpPost(Name = "SubmitReading")]
-        public string SubmitReading(string? sensorid, int? temperature, DateTime? time = null)
+        public string SubmitReading(string? sensorid, int? temperature)
         {
-            _logger.LogInformation($"Submitted sensorid {sensorid}, temperature {temperature}, time {time}  from query parameters");
+            _logger.LogInformation($"Submitted sensorid {sensorid}, temperature {temperature}  from query parameters");
             try
             {
                 sensorid = sensorid ?? HttpContext.Request.Form["sensorid"];
@@ -51,16 +51,7 @@ namespace APV.Service.Controllers
                     return "no temperature";
                 }
 
-                time = (HttpContext != null) && HttpContext.Request.Form.Keys.Contains("time")?
-                            Convert.ToDateTime(HttpContext.Request.Form["time"]) :
-                            (time ?? DateTime.UtcNow);
-
-                _logger.LogInformation($"Reading time for sensor {sensorid} will be set as {time}");
-
-
-                return _measurementService.AddMeasurement(new Measurement(sensorid,
-                    temperature.Value,
-                    time.Value.ToUniversalTime())).ToString();
+                return _measurementService.AddMeasurement(new Measurement(sensorid, temperature.Value, DateTime.UtcNow)).ToString();
             }
             catch (Exception e)
             {
@@ -69,15 +60,12 @@ namespace APV.Service.Controllers
             }
         }
 
-        [HttpGet(Name = "GetReadings")]
-        public string GetReadings(string? sensorId = null, int daysBack = 3, bool latestFirst = true)
+        [HttpGet(Name = "GetAllLatest")]
+        public string GetAllLatest()
         {
-            _logger.LogInformation($"Getting readings");
+            _logger.LogInformation($"Getting all latest readings");
             List<Reading> readings = new List<Reading>();
-            List<Measurement>? m = _measurementService.GetMeasurements(sensorId, 
-                DateTime.UtcNow.AddDays(0-daysBack),
-                DateTime.UtcNow,
-                latestFirst);
+            List<Measurement>? m = _measurementService.GetAllLatestMeasurements();
 
             if (m == null || m.Count < 1)
             {
@@ -103,6 +91,7 @@ namespace APV.Service.Controllers
                         Value = measurement.Value,
                         Time = measurement.Time??DateTime.MinValue
                     };
+                    _logger.LogInformation($"Adding reading: {reading.SensorId} - {reading.Value} - {reading.Time}");
                     readings.Add(reading);
                 }
             }

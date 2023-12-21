@@ -16,18 +16,9 @@ namespace APV.Service.Tests.Unit.MockImplementations
             return true;
         }
 
-        public List<Measurement>? GetMeasurements(string? sensorId = null, DateTime? from = null, DateTime? to = null, bool orderDescending = false)
+        public List<Measurement>? GetAllLatestMeasurements()
         {
-            List<Measurement> measurements = new List<Measurement>();
-            if(string.IsNullOrEmpty(sensorId))
-            {
-                measurements = _measurements;
-            }
-            else
-            {
-                measurements = _measurements.Where(m => m.SensorId == sensorId).ToList();
-            }
-            return measurements;
+            return _measurements.OrderByDescending(m => m.Time).GroupBy(m => m.SensorId)?.Select(x => x.First())?.ToList();
         }
     }
 }
