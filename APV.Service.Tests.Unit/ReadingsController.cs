@@ -94,5 +94,48 @@ namespace APV.Service.Tests.Unit
 
             Assert.IsTrue(result.Contains(expectedResult));
         }
+
+        [TestMethod]
+        public void SubmitAndGetReadingsBySensorSuccessful()
+        {
+            // Arrange
+            string sensorIdOne = "One";
+            string sensorIdTwo = "Two";
+                   
+            MockImplementations.SensorService ss = new MockImplementations.SensorService(new List<Services.Sensor>()
+            {
+                new Services.Sensor(sensorIdOne, new Tuple<int, int>(1,2), null),
+                new Services.Sensor(sensorIdTwo, new Tuple<int, int>(3,4), null)
+
+            });
+            Controllers.ReadingsController controller =
+                new Controllers.ReadingsController(_loggerController, ss,
+                    new MockImplementations.MeasurementService(new List<Services.Measurement>()));
+
+            // Act
+            string result = controller.SubmitReading(sensorIdOne, 20);
+
+            Assert.AreEqual("true", result.ToLower());
+
+            result = controller.SubmitReading(sensorIdOne, 30);
+
+            Assert.AreEqual("true", result.ToLower());
+
+            result = controller.SubmitReading(sensorIdTwo, 40);
+
+            Assert.AreEqual("true", result.ToLower());
+
+            result = controller.GetReadings(sensorIdOne, 1);
+
+            Assert.IsFalse(result.Contains(sensorIdTwo));
+
+            Assert.IsTrue(result.Contains(sensorIdOne));
+
+            Assert.IsTrue(result.Contains($"\"Value\":20"));
+
+            Assert.IsTrue(result.Contains($"\"Value\":30"));
+
+            Assert.IsFalse(result.Contains($"\"Value\":40"));
+        }
     }
 }

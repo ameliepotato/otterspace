@@ -1,10 +1,4 @@
 ﻿using APV.Service.Services;
-using Microsoft.AspNetCore.Localization;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace APV.Service.Tests.Unit.MockImplementations
 {
@@ -24,7 +18,16 @@ namespace APV.Service.Tests.Unit.MockImplementations
 
         public List<Measurement>? GetMeasurements(string? sensorId = null, DateTime? from = null, DateTime? to = null, bool orderDescending = false)
         {
-            return _measurements;
+            List<Measurement> measurements = new List<Measurement>();
+            if(string.IsNullOrEmpty(sensorId))
+            {
+                measurements = _measurements;
+            }
+            else
+            {
+                measurements = _measurements.Where(m => m.SensorId == sensorId).ToList();
+            }
+            return measurements;
         }
     }
 }
