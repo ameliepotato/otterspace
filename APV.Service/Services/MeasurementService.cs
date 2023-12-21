@@ -1,73 +1,128 @@
-﻿namespace APV.Service.Services
+﻿using APV.Service.Database;
+using MongoDB.Bson;
+using MongoDB.Driver;
+
+namespace APV.Service.Services
 {
     public class MeasurementService : IMeasurementService
     {
         private readonly ILogger<MeasurementService> _logger;
-        private IDataManager<Measurement> _dataManager { get; set; }
+        private IMongoDataManager _dataManager;
 
-        public MeasurementService(ILogger<MeasurementService> logger, IDataManager<Measurement> dataManager)
+        public MeasurementService(ILogger<MeasurementService> logger, IMongoDataManager dataManager)
         {
             _logger = logger;
             _dataManager = dataManager;
-            _logger.LogInformation($"Measurement service created");
+            _logger.LogInformation($"Measurement service created and is connected to db: {dataManager.IsConnected()}");
         }
 
-        public bool IsConnected()
-        {
-            bool connected = _dataManager != null && _dataManager.IsConnected();
-            if (!connected)
-            {
-                _logger.LogWarning($"Measurement service not connected");
-            }
-            return connected;
-        }
-
-        public List<Measurement>? GetMeasurements()
+        public List<Measurement>? GetMeasurements(string? sensorId = null,
+            DateTime? from = null, DateTime? to = null, bool descending = false)
         {
             _logger.LogInformation($"Get Measurements");
-            if (IsConnected())
+
+            try
             {
-                try
+                List<Measurement>? measurements = new List<Measurement>();
+                var readingsCollection = _dataManager.GetCollection<Measurement>();
+                _logger.LogInformation($"Filter: matching SensorId {sensorId}");
+                List<BsonDocument> pipeline = new List<BsonDocument>();
+
+                if (string.IsNullOrEmpty(sensorId))
                 {
-                    List<Measurement>? measurements = _dataManager.GetManyData();
-                    _logger.LogInformation($"Found {measurements?.Count} measurements");
-                    if (measurements != null && measurements.Count > 0)
+                    //sensorId = "*";
+                }
+
+
+                if (!to.HasValue)
+                {
+                    to = DateTime.MaxValue;
+                }
+
+                _logger.LogInformation($"Filter: time <= {to}");
+
+                if (!from.HasValue)
+                {
+                    from = DateTime.MinValue;
+                }
+                
+                _logger.LogInformation($"Filter: time >= {from}");
+                
+                measurements = readingsCollection?.AsQueryable()?
+                                    .Where(m => 
+                                        m.Time <= to && 
+                                        m.Time >= from && 
+                                        (string.IsNullOrEmpty(sensorId)?
+                                            m.SensorId.Length>0:
+                                            m.SensorId == sensorId))?
+                                    .OrderByDescending(m => m.Time)?
+                                    .GroupBy(m => m.SensorId)?
+                                    .Select(x => x.First())?
+                                    .ToList();
+
+                if (measurements != null)
+                {
+                    if (descending)
                     {
+                        _logger.LogInformation($"Filter: Descending");
                         measurements = measurements.OrderByDescending(x => x.Time).ToList();
-                        List<Measurement> lastValues = new List<Measurement>();
-                        foreach (Measurement measurement in measurements)
-                        {
-                            if(lastValues.Find( x => x.SensorId == measurement.SensorId ) == null)
-                            {
-                                lastValues.Add( measurement );
-                            }
-                        }
-                        return lastValues;
                     }
+                    _logger.LogInformation($"Found {measurements.Count} results");
                 }
-                catch (Exception ex)
+                else
                 {
-                    _logger.LogError($"Error when retrieving measurements: {ex.Message}");
+                    _logger.LogWarning("No data found.");
                 }
+                return measurements;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Error when retrieving measurements: {ex.Message}");
             }
             _logger.LogWarning("No measurement found");
             return null;
         }
 
-        public bool AddMeasurement(string sensorID, int temp, DateTime? time = null)
+        public bool AddMeasurement(Measurement measurement)
         {
-            _logger.LogInformation($"Add Measurement of sensor: {sensorID}, temperature {temp}, time: {time?.ToString()}");
-            if (IsConnected())
+            _logger.LogInformation($"Add Measurement of sensor: " +
+                $"{measurement.SensorId}, temperature {measurement.Value}, time: {measurement.Time}");
+            try
             {
-                if (time == null)
+                var readingsCollection = _dataManager.GetCollection<Measurement>();
+                if (readingsCollection != null)
                 {
-                    time = DateTime.Now;
+                    readingsCollection.InsertOne(measurement);
+                    return true;
                 }
-                Measurement measurement = new Measurement(sensorID, temp, time);
-                _logger.LogInformation($"Add Measurement of sensor: {sensorID}, temperature {temp}, time: {time?.ToString()}");
-                return _dataManager.AddData(measurement);
             }
-            _logger.LogWarning("Not added");
+            catch (MongoWriteException e)
+            {
+                _logger.LogError($"Add measurement failed with mongo error: {e.Message}");
+            }
+            catch (Exception e)
+            {
+                _logger.LogError($"Add measurement failed with error: {e.Message}");
+            }
+            return false;
+        }
+
+        public bool CreateIndex()
+        {
+            string index = "";
+            _logger.LogInformation($"Creating index...");
+            try
+            {
+                var collection = _dataManager.GetCollection<Measurement>();
+                var indexKeysDefinition = Builders<Measurement>.IndexKeys.Ascending(m => m.SensorId).Descending(m => m.Time);
+                index = collection.Indexes.CreateOne(new CreateIndexModel<Measurement>(indexKeysDefinition));
+                _logger.LogInformation($"Index {index} was created");
+                return true;
+            }
+            catch (Exception e)
+            {
+                _logger.LogWarning($"Index {index} creation failed with error: {e.Message}");
+            }
             return false;
         }
     }

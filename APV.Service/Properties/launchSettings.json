@@ -15,7 +15,9 @@
       "launchBrowser": true,
       "launchUrl": "swagger",
       "environmentVariables": {
-        "ASPNETCORE_ENVIRONMENT": "Development"
+        "ASPNETCORE_ENVIRONMENT": "Development",
+        "MEASUREMENTSDB_CONNECTIONSTRING": "mongodb://admin:Example@localhost:27017",
+        "SENSORSERVICE_CONFIGFILE": "..\\APV.Service.Tests.Integration\\TestData\\sensorService.json"
       }
     },
     "Docker": {

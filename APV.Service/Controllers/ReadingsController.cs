@@ -51,7 +51,9 @@ namespace APV.Service.Controllers
                     return "no temperature";
                 }
 
-                return _measurementService.AddMeasurement(sensorid, temperature.Value).ToString();
+                return _measurementService.AddMeasurement(new Measurement(sensorid,
+                    temperature.Value,
+                    DateTime.Now)).ToString();
             }
             catch (Exception e)
             {
@@ -61,12 +63,16 @@ namespace APV.Service.Controllers
         }
 
         [HttpGet(Name = "GetReadings")]
-        public string? GetReadings()
+        public string? GetReadings(string? sensorId = null)
         {
             _logger.LogInformation($"Getting readings");
             List<Reading> readings = new List<Reading>();
 
-            List<Measurement>? m = _measurementService.GetMeasurements();
+            List<Measurement>? m = _measurementService.GetMeasurements(sensorId, 
+                DateTime.Now.AddDays(-3),
+                DateTime.Now,
+                true);
+
             if (m == null || m.Count < 1)
             {
                 return $"no measurements registered yet";
