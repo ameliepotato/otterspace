@@ -22,9 +22,9 @@ namespace APV.Service.Tests.Unit.MockImplementations
             return true;
         }
 
-        public List<Measurement>? GetMeasurements(string? sensorId = null, DateTime? from = null, DateTime? to = null, bool orderDescending = false)
+        public List<Measurement>? GetAllLatestMeasurements()
         {
-            return _measurements;
+            return _measurements.OrderByDescending(m => m.Time).GroupBy(m => m.SensorId)?.Select(x => x.First())?.ToList();
         }
     }
 }
