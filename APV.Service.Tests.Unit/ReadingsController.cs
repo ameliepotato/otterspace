@@ -1,5 +1,6 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Microsoft.Extensions.Logging;
+using APV.Service.Services;
 
 namespace APV.Service.Tests.Unit
 {
@@ -7,9 +8,6 @@ namespace APV.Service.Tests.Unit
     public class ReadingsController
     {
         protected ILogger<Controllers.ReadingsController> _loggerController;
-        protected ILogger<Services.MeasurementService> _loggerMeasurementsService;
-        protected ILogger<Services.SensorService> _loggerSensorService;
-        protected ILogger<MockImplementations.MongoDataManager> _loggerDatabaseManager;
 
 
         [TestInitialize]
@@ -17,9 +15,6 @@ namespace APV.Service.Tests.Unit
         {
             var loggerFactory = (ILoggerFactory)new LoggerFactory();
             _loggerController = loggerFactory.CreateLogger<Controllers.ReadingsController>();
-            _loggerMeasurementsService = loggerFactory.CreateLogger<Services.MeasurementService>();
-            _loggerSensorService = loggerFactory.CreateLogger<Services.SensorService>();
-            _loggerDatabaseManager = loggerFactory.CreateLogger<MockImplementations.MongoDataManager>();
         }
 
 
@@ -27,12 +22,14 @@ namespace APV.Service.Tests.Unit
         public void SubmitReadingSuccess()
         {
             // Arrange
-            string filePath = Directory.GetCurrentDirectory() + "\\..\\..\\..\\TestData\\ValidSensorService.json";
-            Services.SensorService ss = new Services.SensorService(_loggerSensorService, filePath);
+            string sensorId = "Two";
+            MockImplementations.SensorService ss = new MockImplementations.SensorService(new List<Services.Sensor>(
+                new List<Services.Sensor>()
+                    {
+                        new Services.Sensor(sensorId, new Tuple<int, int>(0,0), null)
+                    }));
             Controllers.ReadingsController controller = new Controllers.ReadingsController(_loggerController, ss, 
-                new Services.MeasurementService(_loggerMeasurementsService, 
-                    new MockImplementations.MongoDataManager(
-                        _loggerDatabaseManager)));
+                new MockImplementations.MeasurementService(new List<Services.Measurement>()));
             // Act
             string result = controller.SubmitReading("Two", 3);
 
@@ -44,13 +41,10 @@ namespace APV.Service.Tests.Unit
         public void SubmitReadingInvalidSensor()
         {
             // Arrange
-            string filePath = Directory.GetCurrentDirectory() + "\\..\\..\\..\\TestData\\ValidSensorService.json";
-            Services.SensorService ss = new Services.SensorService(_loggerSensorService, filePath);
+            MockImplementations.SensorService ss = new MockImplementations.SensorService(new List<Services.Sensor>());
             Controllers.ReadingsController controller = 
                 new Controllers.ReadingsController(_loggerController, ss, 
-                    new Services.MeasurementService(_loggerMeasurementsService,
-                         new MockImplementations.MongoDataManager(
-                             _loggerDatabaseManager)));
+                    new MockImplementations.MeasurementService(new List<Services.Measurement>()));
             // Act
             string result = controller.SubmitReading("Three", 3);
 
@@ -62,16 +56,43 @@ namespace APV.Service.Tests.Unit
         public void GetReadingSuccessNoReadings()
         {
             // Arrange
-            Services.SensorService ss = new Services.SensorService(_loggerSensorService);
+            MockImplementations.SensorService ss = new MockImplementations.SensorService(new List<Services.Sensor>());
             Controllers.ReadingsController controller = 
                 new Controllers.ReadingsController(_loggerController, ss, 
-                    new Services.MeasurementService(_loggerMeasurementsService,
-                         new MockImplementations.MongoDataManager(_loggerDatabaseManager)));
+                    new MockImplementations.MeasurementService(new List<Services.Measurement>()));
             // Act
             string? result = controller.GetReadings();
 
             // Assert
             Assert.AreEqual("no measurements registered yet", result);
+        }
+
+        [TestMethod]
+        public void SubmitAndGetReadingsSuccessful()
+        {
+            // Arrange
+            string sensorID = "One";
+            int temp = 2;
+            int posx = 3;
+            int posy = 4;
+            string expectedResult = $"\"SensorId\":\"{sensorID}\",\"PositionX\":{posx},\"PositionY\":{posy},\"Value\":{temp}";
+
+            MockImplementations.SensorService ss = new MockImplementations.SensorService(new List<Services.Sensor>()
+            {
+                new Services.Sensor(sensorID, new Tuple<int, int>(posx,posy), null)
+            });
+            Controllers.ReadingsController controller =
+                new Controllers.ReadingsController(_loggerController, ss,
+                    new MockImplementations.MeasurementService(new List<Services.Measurement>()));
+            
+            // Act
+            string result = controller.SubmitReading(sensorID, temp);
+
+            Assert.AreEqual("true", result.ToLower());
+
+            result = controller.GetReadings(sensorID, 1);
+
+            Assert.IsTrue(result.Contains(expectedResult));
         }
     }
 }
