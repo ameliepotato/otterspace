@@ -35,7 +35,7 @@ namespace APV.Service.Tests.Unit
             bool ret = measurementService.AddMeasurement(measurement);            
             Assert.IsTrue(ret);
 
-            List<Measurement>? measurements = measurementService.GetMeasurements();
+            List<Measurement>? measurements = measurementService.GetAllLatestMeasurements();
             
             Assert.IsNotNull(measurements);
             Assert.AreEqual(1, measurements.Count);
@@ -76,7 +76,7 @@ namespace APV.Service.Tests.Unit
 
             Assert.IsTrue(ret);
 
-            List<Measurement>? measurements = measurementService.GetMeasurements();
+            List<Measurement>? measurements = measurementService.GetAllLatestMeasurements();
 
             Assert.IsNotNull(measurements);
             Assert.AreEqual(2, measurements.Count);
