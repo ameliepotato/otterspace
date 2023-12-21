@@ -24,9 +24,9 @@ namespace APV.Service.Controllers
         }
 
         [HttpPost(Name = "SubmitReading")]
-        public string SubmitReading(string? sensorid, int? temperature)
+        public string SubmitReading(string? sensorid, int? temperature, DateTime? time = null)
         {
-            _logger.LogInformation($"Submitted sensorid {sensorid} and temperature {temperature} from query parameters");
+            _logger.LogInformation($"Submitted sensorid {sensorid}, temperature {temperature}, time {time}  from query parameters");
             try
             {
                 sensorid = sensorid ?? HttpContext.Request.Form["sensorid"];
@@ -51,9 +51,16 @@ namespace APV.Service.Controllers
                     return "no temperature";
                 }
 
+                time = (HttpContext != null) && HttpContext.Request.Form.Keys.Contains("time")?
+                            Convert.ToDateTime(HttpContext.Request.Form["time"]) :
+                            (time ?? DateTime.UtcNow);
+
+                _logger.LogInformation($"Reading time for sensor {sensorid} will be set as {time}");
+
+
                 return _measurementService.AddMeasurement(new Measurement(sensorid,
                     temperature.Value,
-                    DateTime.Now)).ToString();
+                    time.Value.ToUniversalTime())).ToString();
             }
             catch (Exception e)
             {
@@ -63,15 +70,14 @@ namespace APV.Service.Controllers
         }
 
         [HttpGet(Name = "GetReadings")]
-        public string? GetReadings(string? sensorId = null)
+        public string? GetReadings(string? sensorId = null, int daysBack = 3, bool latestFirst = true)
         {
             _logger.LogInformation($"Getting readings");
             List<Reading> readings = new List<Reading>();
-
             List<Measurement>? m = _measurementService.GetMeasurements(sensorId, 
-                DateTime.Now.AddDays(-3),
-                DateTime.Now,
-                true);
+                DateTime.UtcNow.AddDays(0-daysBack),
+                DateTime.UtcNow,
+                latestFirst);
 
             if (m == null || m.Count < 1)
             {

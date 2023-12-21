@@ -17,7 +17,7 @@ namespace APV.Service.Services
         }
 
         public List<Measurement>? GetMeasurements(string? sensorId = null,
-            DateTime? from = null, DateTime? to = null, bool descending = false)
+            DateTime? from = null, DateTime? to = null, bool descending = true)
         {
             _logger.LogInformation($"Get Measurements");
 
@@ -45,20 +45,31 @@ namespace APV.Service.Services
                 {
                     from = DateTime.MinValue;
                 }
+
+                to = to?.ToUniversalTime();
+                from = from?.ToUniversalTime();
                 
                 _logger.LogInformation($"Filter: time >= {from}");
-                
-                measurements = readingsCollection?.AsQueryable()?
-                                    .Where(m => 
-                                        m.Time <= to && 
-                                        m.Time >= from && 
-                                        (string.IsNullOrEmpty(sensorId)?
-                                            m.SensorId.Length>0:
-                                            m.SensorId == sensorId))?
-                                    .OrderByDescending(m => m.Time)?
-                                    .GroupBy(m => m.SensorId)?
-                                    .Select(x => x.First())?
-                                    .ToList();
+
+                var filtered = readingsCollection?.AsQueryable()?
+                                    .Where(m =>
+                                        m.Time <= to &&
+                                        m.Time >= from &&
+                                        (string.IsNullOrEmpty(sensorId) ?
+                                            m.SensorId.Length > 0 :
+                                            m.SensorId == sensorId));
+
+                if(descending)
+                {
+                    filtered = filtered?.OrderByDescending(m => m.Time);
+                }
+
+                if(string.IsNullOrEmpty(sensorId))
+                {
+                    filtered = filtered?.GroupBy(m => m.SensorId)?.Select(x => x.First());
+                }
+
+                measurements = filtered?.ToList();
 
                 if (measurements != null)
                 {

@@ -28,7 +28,7 @@ namespace APV.Service.Tests.Unit
         {
             // Arrange
             string filePath = Directory.GetCurrentDirectory() + "\\..\\..\\..\\TestData\\ValidSensorService.json";
-            Services.SensorService ss = new Service.Services.SensorService(_loggerSensorService, filePath);
+            Services.SensorService ss = new Services.SensorService(_loggerSensorService, filePath);
             Controllers.ReadingsController controller = new Controllers.ReadingsController(_loggerController, ss, 
                 new Services.MeasurementService(_loggerMeasurementsService, 
                     new MockImplementations.MongoDataManager(

@@ -1,4 +1,6 @@
-﻿namespace APV.Service.Services
+﻿using MongoDB.Bson.Serialization.Attributes;
+
+namespace APV.Service.Services
 {
     public class Measurement
     {
@@ -6,11 +8,13 @@
         {
             SensorId = sensorID;
             Value = measurement;
-            Time = time ?? DateTime.Now;
+            Time = time ?? DateTime.UtcNow;
             _id = Guid.NewGuid().ToString();
         }
         public string SensorId { get; set; }
         public int Value { get; set; }
+
+        [BsonDateTimeOptions(Kind = DateTimeKind.Utc)]
 
         public DateTime? Time { get; set; }
 
