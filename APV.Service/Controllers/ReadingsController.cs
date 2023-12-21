@@ -70,7 +70,7 @@ namespace APV.Service.Controllers
         }
 
         [HttpGet(Name = "GetReadings")]
-        public string? GetReadings(string? sensorId = null, int daysBack = 3, bool latestFirst = true)
+        public string GetReadings(string? sensorId = null, int daysBack = 3, bool latestFirst = true)
         {
             _logger.LogInformation($"Getting readings");
             List<Reading> readings = new List<Reading>();
