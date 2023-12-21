@@ -4,6 +4,7 @@ using APV.Service.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using MongoDB.Driver;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -17,15 +18,15 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddLogging();
-builder.Services.AddScoped<IMeasurementService, MeasurementService>();
+builder.Services.AddScoped<IMeasurementService>( _ => new MeasurementService(
+                logFactory.CreateLogger<MeasurementService>(),
+                new MongoDataManager(logFactory.CreateLogger<MongoDataManager>(),
+                    Environment.GetEnvironmentVariable("MEASUREMENTSDB_CONNECTIONSTRING"),
+                    "Measurements",
+                    "Readings")));
 builder.Services.AddScoped<ISensorService>( _ => new SensorService(
                 logFactory.CreateLogger<SensorService>(),
                 Environment.GetEnvironmentVariable("SENSORSERVICE_CONFIGFILE")));
-builder.Services.AddScoped<IDataManager<Measurement>>( _ => new MongoDatabaseManager<Measurement>(
-                logFactory.CreateLogger<MongoDatabaseManager<Measurement>>(),      
-                Environment.GetEnvironmentVariable("MEASUREMENTSDB_CONNECTIONSTRING")??"",
-                "Measurements",
-                "Readings"));
 
 var app = builder.Build();
 

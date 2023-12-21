@@ -1,6 +1,5 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Microsoft.Extensions.Logging;
-using APV.Service.Services;
 
 namespace APV.Service.Tests.Unit
 {
@@ -10,6 +9,7 @@ namespace APV.Service.Tests.Unit
         protected ILogger<Controllers.ReadingsController> _loggerController;
         protected ILogger<Services.MeasurementService> _loggerMeasurementsService;
         protected ILogger<Services.SensorService> _loggerSensorService;
+        protected ILogger<MockImplementations.MongoDataManager> _loggerDatabaseManager;
 
 
         [TestInitialize]
@@ -19,6 +19,7 @@ namespace APV.Service.Tests.Unit
             _loggerController = loggerFactory.CreateLogger<Controllers.ReadingsController>();
             _loggerMeasurementsService = loggerFactory.CreateLogger<Services.MeasurementService>();
             _loggerSensorService = loggerFactory.CreateLogger<Services.SensorService>();
+            _loggerDatabaseManager = loggerFactory.CreateLogger<MockImplementations.MongoDataManager>();
         }
 
 
@@ -29,7 +30,9 @@ namespace APV.Service.Tests.Unit
             string filePath = Directory.GetCurrentDirectory() + "\\..\\..\\..\\TestData\\ValidSensorService.json";
             Services.SensorService ss = new Service.Services.SensorService(_loggerSensorService, filePath);
             Controllers.ReadingsController controller = new Controllers.ReadingsController(_loggerController, ss, 
-                new Services.MeasurementService(_loggerMeasurementsService, new MockImplementations.DataManager<Measurement>()));
+                new Services.MeasurementService(_loggerMeasurementsService, 
+                    new MockImplementations.MongoDataManager(
+                        _loggerDatabaseManager)));
             // Act
             string result = controller.SubmitReading("Two", 3);
 
@@ -45,7 +48,9 @@ namespace APV.Service.Tests.Unit
             Services.SensorService ss = new Services.SensorService(_loggerSensorService, filePath);
             Controllers.ReadingsController controller = 
                 new Controllers.ReadingsController(_loggerController, ss, 
-                    new Services.MeasurementService(_loggerMeasurementsService, new MockImplementations.DataManager<Measurement>()));
+                    new Services.MeasurementService(_loggerMeasurementsService,
+                         new MockImplementations.MongoDataManager(
+                             _loggerDatabaseManager)));
             // Act
             string result = controller.SubmitReading("Three", 3);
 
@@ -57,10 +62,11 @@ namespace APV.Service.Tests.Unit
         public void GetReadingSuccessNoReadings()
         {
             // Arrange
-            Services.SensorService ss = new Service.Services.SensorService(_loggerSensorService);
+            Services.SensorService ss = new Services.SensorService(_loggerSensorService);
             Controllers.ReadingsController controller = 
                 new Controllers.ReadingsController(_loggerController, ss, 
-                    new Services.MeasurementService(_loggerMeasurementsService, new MockImplementations.DataManager<Measurement>()));
+                    new Services.MeasurementService(_loggerMeasurementsService,
+                         new MockImplementations.MongoDataManager(_loggerDatabaseManager)));
             // Act
             string? result = controller.GetReadings();
 
