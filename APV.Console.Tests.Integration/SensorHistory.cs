@@ -52,9 +52,6 @@ namespace APV.Console.Tests.Integration
 
             string data = JsonSerializer.Serialize(list);
             
-            List<string> responses = new List<string>();
-            responses.Add(data);
-            
             Tools.Server.AddToResponseData("GetAllLatest", data);                       
            
 
