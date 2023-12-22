@@ -1,7 +1,3 @@
-using OpenQA.Selenium.DevTools.V118.Network;
-using System.Net;
-using System.Net.Sockets;
-using System.Text;
 using System.Text.Json;
 
 namespace APV.Console.Tests.Integration
@@ -11,8 +7,7 @@ namespace APV.Console.Tests.Integration
         [Test]
         public void ReadingsSuccesful()
         {
-            var reading = new
-            {
+            var reading = new {
                 SensorId = "Fake",
                 Value = 45,
                 PositionX = 2,
@@ -26,7 +21,7 @@ namespace APV.Console.Tests.Integration
             Task task = Task.Run(() =>
             {
                 Tools.Server.StartListeningOnAndRespondWith(
-                    $"http://{IPREADINGSSERVICE}:{PORTREADINGSSERVICE}/", data);
+                    $"http://{IPREADINGSSERVICE}:{PORTREADINGSSERVICE}/Readings/", "GetAllLatest", data);
             });
             _webDriver.Url = $"http://{IPWEBSITE}:{PORTWEBSITE}";
             IWebElement myReading = _webDriver.FindElement(By.Id("Fake"));
@@ -43,7 +38,7 @@ namespace APV.Console.Tests.Integration
             Task task = Task.Run(() =>
             {
                 Tools.Server.StartListeningOnAndRespondWith(
-                    $"http://{IPREADINGSSERVICE}:{PORTREADINGSSERVICE}/", data);
+                    $"http://{IPREADINGSSERVICE}:{PORTREADINGSSERVICE}/Readings/", "GetAllLatest", data);
             });
             _webDriver.Url = $"http://{IPWEBSITE}:{PORTWEBSITE}";
             IWebElement myReading = _webDriver.FindElement(By.Id("error"));

@@ -49,7 +49,7 @@ services:
         ports:
             - 37070:80      
         environment:
-            - APVCONSOLE_READINGMANAGER_URL=http://host.docker.internal:37069/Readings
+            - APVCONSOLE_READINGMANAGER_URL=http://host.docker.internal:37069/Readings/
 
 volumes:
     sensorService:
