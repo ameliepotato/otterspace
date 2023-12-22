@@ -3,6 +3,32 @@
 @{
     ViewData["Title"] = "Home Temperatures";
 }
+<script type="text/javascript">
+
+    function OnHistoryModal(sensorId) {
+        var outputElement = document.getElementById('body' + sensorId);
+        fetch('SensorHistory?sensorID=' + sensorId)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.text();
+            })
+            .then(data => {
+                var parser = new DOMParser();
+                var doc = parser.parseFromString(data, "text/html");               
+                outputElement.innerHTML = doc.querySelector('#historyEntries').innerHTML;
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+
+        $('#historyModal' + sensorId).modal('show');
+        setTimeout(function () {
+            window.location.href = '/Index';
+        }, 26000);
+    }
+</script>
 <div class="text-center">
     @if (Model.Readings != null && Model.Readings.Count > 0)
     {
@@ -13,9 +39,28 @@
             <img src="~/plan.jpg" id="planImg" alt="floor plan image">
             @foreach (var reading in Model.Readings)
             {
-                <div id="@Html.Encode(@reading.SensorId)" class="overlay-text"
-                     style="left: @Html.Encode(reading.PositionX)px; top: @Html.Encode(reading.PositionY)px; background-color: @reading.ColorCode">
-                    @Html.Encode(@reading.Value)&deg;
+                <div id="containerSensor@(reading.SensorId)">
+                    <div class="overlay-text" 
+                        style="left: @(reading.PositionX)px; top: @(reading.PositionY)px; background-color: @reading.ColorCode" onclick="OnHistoryModal('@reading.SensorId')">
+                        @Html.Encode(@reading.Value)&deg;
+                    </div>
+                    <div id="history@(reading.SensorId)">
+                       
+                        <div class="modal" tabindex="-1" role="dialog" id="historyModal@(reading.SensorId)">
+                            <div class="modal-dialog" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title">@reading.SensorId history</h5>
+                                        <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                    <div class="modal-body" id="body@(reading.SensorId)">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             }
         </div>

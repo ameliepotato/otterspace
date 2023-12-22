@@ -24,7 +24,7 @@ namespace APV.Console.Tests.Integration
                     $"http://{IPREADINGSSERVICE}:{PORTREADINGSSERVICE}/Readings/", "GetAllLatest", data);
             });
             _webDriver.Url = $"http://{IPWEBSITE}:{PORTWEBSITE}";
-            IWebElement myReading = _webDriver.FindElement(By.Id("Fake"));
+            IWebElement myReading = _webDriver.FindElement(By.Id("containerSensorFake"));
             List<IWebElement>? allReadings = _webDriver.FindElements(By.ClassName("overlay-text"))?.ToList();
 
             Assert.That(allReadings, Is.Not.Null);

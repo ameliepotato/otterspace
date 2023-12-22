@@ -99,5 +99,11 @@ namespace APV.Service.Tests.Unit
 
             Assert.IsTrue(ret);
         }
+
+        [TestMethod]
+        public void GetSensorHistorySuccessful()
+        {
+
+        }
     }
 }

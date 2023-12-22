@@ -1,4 +1,5 @@
 using APV.Console;
+using APV.Console.Pages;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -13,8 +14,14 @@ using var logFactory = LoggerFactory.Create(builder =>
 
 builder.Services.AddLogging();
 
-builder.Services.AddScoped<IReadingsManager>(_ => 
+builder.Services.AddScoped<IReadingsManager>(_ =>
     new ReadingsManager(logFactory.CreateLogger<ReadingsManager>(),
+        Environment.GetEnvironmentVariable("APVCONSOLE_READINGMANAGER_URL_CONSOLEINTEGRATIONTESTS") ??
+            Environment.GetEnvironmentVariable("APVCONSOLE_READINGMANAGER_URL") ??
+                ""));
+
+builder.Services.AddScoped<ISensorHistoryManager>(_ =>
+    new SensorHistoryManager(logFactory.CreateLogger<SensorHistoryManager>(),
         Environment.GetEnvironmentVariable("APVCONSOLE_READINGMANAGER_URL_CONSOLEINTEGRATIONTESTS") ??
             Environment.GetEnvironmentVariable("APVCONSOLE_READINGMANAGER_URL") ??
                 ""));
