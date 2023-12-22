@@ -21,13 +21,12 @@ namespace APV.Console.Tests.Integration.Tools
             }
 
             bool responded = false;
+            HttpListener listener = new HttpListener();
+            listener.Prefixes.Add(url);
+            listener.Start();
 
             while (!responded)
             {
-                // Create a listener.
-                HttpListener listener = new HttpListener();
-                listener.Prefixes.Add(url);
-                listener.Start();
                 // Note: The GetContext method blocks while waiting for a request.
                 HttpListenerContext context = listener.GetContext();
                 string? requestUrl = context.Request.Url?.AbsoluteUri;
@@ -49,12 +48,8 @@ namespace APV.Console.Tests.Integration.Tools
                         responded = true;
                     }
                 }
-                else
-                {
-                    continue;
-                }
-                listener.Stop();
             }
+            listener.Stop();
         }
     }
 }
