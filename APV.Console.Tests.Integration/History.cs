@@ -1,4 +1,5 @@
-﻿using System.Text.Json;
+﻿using System.Diagnostics;
+using System.Text.Json;
 
 namespace APV.Console.Tests.Integration
 {
@@ -84,9 +85,19 @@ namespace APV.Console.Tests.Integration
             });
 
             _webDriver.Url = $"http://{IPWEBSITE}:{PORTWEBSITE}";
-            IWebElement myReading = _webDriver.FindElement(By.Id("historyFake"));
+            IWebElement myReading = _webDriver.FindElement(By.Id("btnFake"));
 
             Assert.That(myReading, Is.Not.Null);
+
+            IJavaScriptExecutor javascriptExecutor = (IJavaScriptExecutor)_webDriver;
+            javascriptExecutor.ExecuteScript("arguments[0].click();", myReading);
+
+            Thread.Sleep(3000);
+
+            List<IWebElement> entries = _webDriver.FindElement(By.Id("bodyFake")).FindElements(By.XPath("//li")).ToList();
+
+            Assert.That(3 == entries.Count);
+
         }
     }
 }

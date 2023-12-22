@@ -40,7 +40,7 @@
             @foreach (var reading in Model.Readings)
             {
                 <div id="containerSensor@(reading.SensorId)">
-                    <div class="overlay-text" 
+                    <div class="overlay-text clickable" id="btn@(reading.SensorId)"
                         style="left: @(reading.PositionX)px; top: @(reading.PositionY)px; background-color: @reading.ColorCode" onclick="OnHistoryModal('@reading.SensorId')">
                         @Html.Encode(@reading.Value)&deg;
                     </div>
