@@ -8,16 +8,17 @@ namespace APV.Console.Pages
     {
         public List<SensorHistoryEntryModel> _entries = new List<SensorHistoryEntryModel>();
 
+        private ISensorHistoryManager _historyManager;
         private readonly ILogger<SensorHistoryModel> _logger;
 
-        public SensorHistoryModel(ILogger<SensorHistoryModel> logger)
+        public SensorHistoryModel(ILogger<SensorHistoryModel> logger, ISensorHistoryManager historyManager)
         {
+            _historyManager = historyManager;
             _logger = logger;
         }
         public void OnGet(string sensorId)
         {
-            SensorHistoryManager historyManager = new SensorHistoryManager(_logger);
-            _entries = historyManager.GetSensorHistory(sensorId, DateTime.UtcNow.AddDays(-3), DateTime.UtcNow) ??
+            _entries = _historyManager.GetSensorHistory(sensorId, DateTime.UtcNow.AddDays(-3), DateTime.UtcNow) ??
                 new List<SensorHistoryEntryModel>();
         }
     }

@@ -3,7 +3,7 @@ using System.Text.Json;
 
 namespace APV.Console.Tests.Integration
 {
-    public class History : WebTest
+    public class SensorHistory : WebTest
     {
 
         [Test]
@@ -61,18 +61,18 @@ namespace APV.Console.Tests.Integration
             list.Clear();
             list.Add(new { 
                     Temperature = 33,
-                    Time = DateTime.UtcNow});
+                    RegisteredOn = DateTime.UtcNow});
 
             list.Add(new
             {
                 Temperature = 34,
-                Time = DateTime.UtcNow.AddDays(-1)
+                RegisteredOn = DateTime.UtcNow.AddDays(-1)
             });
 
             list.Add(new
             {
                 Temperature = 23,
-                Time = DateTime.UtcNow.AddDays(-2)
+                RegisteredOn = DateTime.UtcNow.AddDays(-2)
             });
 
             data = JsonSerializer.Serialize(list);
@@ -94,7 +94,8 @@ namespace APV.Console.Tests.Integration
 
             Thread.Sleep(3000);
 
-            List<IWebElement> entries = _webDriver.FindElement(By.Id("bodyFake")).FindElements(By.XPath("//li")).ToList();
+            List<IWebElement> entries = _webDriver.FindElements(By.XPath("//li"))
+                .Where(x => GetParent(x).GetAttribute("id") == "bodyFake").ToList();
 
             Assert.That(3 == entries.Count);
 

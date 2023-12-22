@@ -7,12 +7,12 @@ using System.Threading.Tasks;
 namespace APV.Service.Tests.Integration
 {
     [TestClass]
-    public class GetHistory
+    public class GetSensorHistory
     {
         [TestMethod]
         public void BySensorWorks()
         {
-
+            Assert.Fail();
         }
     }
 }

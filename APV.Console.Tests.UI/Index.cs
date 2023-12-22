@@ -68,18 +68,5 @@ namespace APV.Console.Tests.UI
             Assert.That(webElement.Count, Is.EqualTo(1));
             Assert.That(webElement[0].Text, Is.Not.Empty);
         }
-
-        [Test]
-        public void HistoryDialogShowsOnCLickAndClosesWithX()
-        {
-
-        }
-
-
-        [Test]
-        public void HistoryDialogClosesOnTimeout()
-        {
-
-        }
     }
 }

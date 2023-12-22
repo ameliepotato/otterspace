@@ -61,19 +61,6 @@ namespace APV.Console
                     _logger.LogError($"Getting history from {url} failed with error {e.Message}");
                 }
             }
-            if(readings == null || readings.Count < 1)
-            {
-                readings = new List<SensorHistoryEntryModel> {
-                            new SensorHistoryEntryModel(){
-                                RegisteredOn = DateTime.Now,
-                                Temperature = 22
-                            },
-                            new SensorHistoryEntryModel(){
-                                Temperature = 20,
-                                RegisteredOn = DateTime.Now.AddDays(-2)
-                            }
-                        };
-            }
             _logger.LogInformation($"Returning {readings?.Count} history entries");
             return readings;
         }

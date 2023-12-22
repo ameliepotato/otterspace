@@ -6,12 +6,12 @@ using System.Threading.Tasks;
 
 namespace APV.Console.Tests.Unit
 {
-    public class HistoryModel
+    public class SensorHistoryModel
     {
         [Test]
-        public void GetBySensorIsSuccesful()
+        public void OnGetIsSuccesful()
         {
-
+            Assert.That(false);
         }
     }
 }

@@ -6,12 +6,12 @@ using System.Threading.Tasks;
 
 namespace APV.Console.Tests.Unit
 {
-    public class HistoryManager
+    public class SensorHistoryManager
     {
         [Test]
         public void GetSensorHistoryWorks()
         {
-
+            Assert.That(false);
         }
 
     }

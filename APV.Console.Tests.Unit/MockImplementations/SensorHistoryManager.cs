@@ -9,7 +9,8 @@ namespace APV.Console.Tests.Unit.MockImplementations
     public class SensorHistoryManager : ISensorHistoryManager
     {
         private List<SensorHistoryEntryModel> _history;
-        public SensorHistoryManager(List<SensorHistoryEntryModel> history) {
+        public SensorHistoryManager(List<SensorHistoryEntryModel> history)
+        {
             _history = history;
         }
         public List<SensorHistoryEntryModel>? GetSensorHistory(string sensorId, DateTime from, DateTime? to)
@@ -21,9 +22,12 @@ namespace APV.Console.Tests.Unit.MockImplementations
         {
             return new List<SensorHistoryEntryModel>()
             {
-                new SensorHistoryEntryModel(),
-                new SensorHistoryEntryModel(),
-                new SensorHistoryEntryModel()
+                new SensorHistoryEntryModel(){
+                                RegisteredOn = DateTime.Now,
+                                Temperature = 22 },
+                new SensorHistoryEntryModel(){
+                                Temperature = 20,
+                                RegisteredOn = DateTime.Now.AddDays(-2) }
             };
         }
     }

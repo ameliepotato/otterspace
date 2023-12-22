@@ -24,6 +24,9 @@ namespace APV.Console.Tests.Integration
             _webDriver.Close();
         }
 
-
+        public static IWebElement GetParent(IWebElement e)
+        {
+            return e.FindElement(By.XPath(".."));
+        }
     }
 }
