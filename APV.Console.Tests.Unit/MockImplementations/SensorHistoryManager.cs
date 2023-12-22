@@ -15,19 +15,33 @@ namespace APV.Console.Tests.Unit.MockImplementations
         }
         public List<SensorHistoryEntryModel>? GetSensorHistory(string sensorId, DateTime from, DateTime? to)
         {
-            return GetMany();
+            return _history?.Where(x => x.RegisteredOn >= from && x.RegisteredOn <= to)?.ToList();
         }
 
-        public static List<SensorHistoryEntryModel> GetMany()
+        public static List<SensorHistoryEntryModel> GetFour()
         {
             return new List<SensorHistoryEntryModel>()
             {
-                new SensorHistoryEntryModel(){
-                                RegisteredOn = DateTime.Now,
-                                Temperature = 22 },
-                new SensorHistoryEntryModel(){
-                                Temperature = 20,
-                                RegisteredOn = DateTime.Now.AddDays(-2) }
+                new SensorHistoryEntryModel()
+                {
+                      RegisteredOn = DateTime.Now,
+                      Temperature = 22
+                },
+                new SensorHistoryEntryModel()
+                {
+                      Temperature = 20,
+                      RegisteredOn = DateTime.Now.AddDays(-2)
+                },
+                new SensorHistoryEntryModel()
+                {
+                    Temperature = -3,
+                    RegisteredOn = DateTime.Now.AddYears(-2)
+                },
+                new SensorHistoryEntryModel()
+                {
+                    Temperature = 10,
+                    RegisteredOn = DateTime.Now.AddMonths(-2)
+                }
             };
         }
     }

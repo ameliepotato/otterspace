@@ -11,7 +11,7 @@ namespace APV.Console.Tests.Unit
         [Test]
         public void GetAllLatestReadingsWorks()
         {
-
+            Assert.Fail();
         }
     }
 }

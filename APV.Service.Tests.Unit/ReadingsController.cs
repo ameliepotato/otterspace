@@ -98,7 +98,7 @@ namespace APV.Service.Tests.Unit
         [TestMethod]
         public void GetSensorHistorySuccessful()
         {
-
+            Assert.Fail();
         }
     }
 }
