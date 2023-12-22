@@ -5,21 +5,17 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace APV.Console.Tests.Integration
+namespace APV.Console.Tests.UI
 {
-    [TestFixture]
-    public class WebTest
+    public class Page
     {
-        protected const string IPREADINGSSERVICE = "localhost";
-        protected const int PORTREADINGSSERVICE = 37010;
-        protected const int PORTWEBSITE = 26080;
-        protected const string IPWEBSITE = "localhost";
-        protected IWebDriver _webDriver { get; set; }
+        protected IWebDriver _webDriver;
+
         [SetUp]
         public void Setup()
         {
             string driverPath = Environment.GetEnvironmentVariable("CHROMEDRIVERPATH_UITESTS") ??
-                Directory.GetCurrentDirectory() + Path.DirectorySeparatorChar + "Drivers";
+                    Directory.GetCurrentDirectory() + Path.DirectorySeparatorChar + "Drivers";
             _webDriver = new ChromeDriver(driverPath);
         }
 
@@ -29,6 +25,9 @@ namespace APV.Console.Tests.Integration
             _webDriver.Close();
         }
 
-
+        public static IWebElement GetParent(IWebElement e)
+        {
+            return e.FindElement(By.XPath(".."));
+        }
     }
 }

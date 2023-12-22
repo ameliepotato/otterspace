@@ -7,18 +7,19 @@ namespace APV.Service.Tests.Integration
     [TestClass]
     public class SubmitReading
     {
+        private string apiLocationGet = "http://localhost:37069/Readings/GetAllLatest";
+        private string apiLocationPost = "http://localhost:37069/Readings/SubmitReading";
         [TestMethod]
         public void SubmitReadingSuccess()
         {
             //arrange
-            var apiLocation = "http://localhost:37069/Readings";
             Dictionary<string, object> postParams = new Dictionary<string, object>();
             
             postParams.Add("sensorid", "One");
             postParams.Add("temperature", 22);
 
             //act
-            string response = Request.Post(apiLocation, postParams);
+            string response = Request.Post(apiLocationPost, postParams);
 
             //assert
             Assert.AreEqual("true", response.ToLower());
@@ -27,11 +28,8 @@ namespace APV.Service.Tests.Integration
         [TestMethod]
         public void SubmitReadingFailsNoIDInPostParameters()
         {
-            //arrange
-            var apiLocation = "http://localhost:37069/Readings";
-
             //act
-            string response = Request.Post(apiLocation, new Dictionary<string, object>());
+            string response = Request.Post(apiLocationPost, new Dictionary<string, object>());
 
             //assert
             Assert.AreEqual("no sensor id", response);
@@ -41,13 +39,12 @@ namespace APV.Service.Tests.Integration
         public void SubmitReadingFailsInvalidID()
         {
             //arrange
-            var apiLocation = "http://localhost:37069/Readings";
             Dictionary<string, object> postParameters = new Dictionary<string, object>();
             postParameters.Add("sensorid", "Four");
             postParameters.Add("temperature", 33);
 
             //act
-            string response = Request.Post(apiLocation, postParameters);
+            string response = Request.Post(apiLocationPost, postParameters);
 
             //assert
             Assert.AreEqual("invalid sensor id", response);

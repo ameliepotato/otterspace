@@ -10,29 +10,28 @@ namespace APV.Service.Tests.Integration
     [TestClass]
     public class GetReadings
     {
+        private string apiLocationGet = "http://localhost:37069/Readings/GetAllLatest";
+        private string apiLocationPost = "http://localhost:37069/Readings/SubmitReading";
         [TestMethod]
         public void GetAllLatestMeasurementsSuccess()
         {
-            var apiLocation = "http://localhost:37069/Readings";
             Dictionary<string, object> postParams = new Dictionary<string, object>();
 
             postParams.Add("sensorid", "One");
             postParams.Add("temperature", 22);
 
-            string response = Request.Post(apiLocation, postParams);
+            string response = Request.Post(apiLocationPost, postParams);
 
             Assert.AreEqual("true", response.ToLower());
 
             postParams["sensorid"] = "Two";
             postParams["temperature"] = 34;
 
-            response = Request.Post(apiLocation, postParams);
+            response = Request.Post(apiLocationPost, postParams);
 
             Assert.AreEqual("true", response.ToLower());
 
-            apiLocation += "?GetAllLatest";
-
-            response = Request.Get(apiLocation);
+            response = Request.Get(apiLocationGet);
 
             List<JsonDocument> list = JsonSerializer.Deserialize<List<JsonDocument>>(response)??new List<JsonDocument>();
 
@@ -54,25 +53,22 @@ namespace APV.Service.Tests.Integration
         [TestMethod]
         public void GetOneLatestMeasurementSuccess()
         {
-            var apiLocation = "http://localhost:37069/Readings";
             Dictionary<string, object> postParams = new Dictionary<string, object>();
 
             postParams.Add("sensorid", "Five");
             postParams.Add("temperature", 22);
 
-            string response = Request.Post(apiLocation, postParams);
+            string response = Request.Post(apiLocationPost, postParams);
 
             Assert.AreEqual("true", response.ToLower());
 
             postParams["temperature"] = 34;
 
-            response = Request.Post(apiLocation, postParams);
+            response = Request.Post(apiLocationPost, postParams);
 
             Assert.AreEqual("true", response.ToLower());
 
-            apiLocation += "?GetAllLatest";
-
-            response = Request.Get(apiLocation);
+            response = Request.Get(apiLocationGet);
 
             List<JsonDocument> list = JsonSerializer.Deserialize<List<JsonDocument>>(response) ?? new List<JsonDocument>();
 

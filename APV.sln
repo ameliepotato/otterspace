@@ -20,7 +20,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "APV.Console.Tests.UI", "APV
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "APV.Console.Tests.Integration", "APV.Console.Tests.Integration\APV.Console.Tests.Integration.csproj", "{730316BD-CC67-406B-9CA2-57660984D070}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "APV.Console.Tests.Unit", "APV.Console.Tests.Unit\APV.Console.Tests.Unit.csproj", "{B7529A7B-8896-4874-B5B9-40F2275E48B0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "APV.Console.Tests.Unit", "APV.Console.Tests.Unit\APV.Console.Tests.Unit.csproj", "{B7529A7B-8896-4874-B5B9-40F2275E48B0}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
