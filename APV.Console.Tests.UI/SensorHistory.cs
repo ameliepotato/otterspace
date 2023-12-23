@@ -36,11 +36,15 @@ namespace APV.Console.Tests.UI
 
             Assert.That(entry, Is.Not.Null);
 
+            entries = _webDriver.FindElements(By.Id("chartImg")).ToList();
+
+            Assert.That(entries.Count, Is.EqualTo(1));
+
             entry.Click();
             
             entries = _webDriver.FindElements(By.ClassName("modal-open")).ToList();
 
-            Assert.That(entries.Count == 0);
+            Assert.That(entries.Count == 0);   
         }
     }
 }

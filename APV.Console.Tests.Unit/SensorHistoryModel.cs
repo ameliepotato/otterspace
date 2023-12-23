@@ -24,7 +24,7 @@ namespace APV.Console.Tests.Unit
                 new MockImplementations.SensorHistoryManager(MockImplementations.SensorHistoryManager.GetFour());
             Pages.SensorHistoryModel page = new Pages.SensorHistoryModel(_logger, historyManager);
             page.OnGet("");
-            Assert.That(page._entries.Count, Is.EqualTo(1));
+            Assert.That(page.Entries.Count, Is.EqualTo(1));
         }
     }
 }

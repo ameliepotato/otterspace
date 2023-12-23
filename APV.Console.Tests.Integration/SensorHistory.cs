@@ -91,10 +91,11 @@ namespace APV.Console.Tests.Integration
 
             Thread.Sleep(3000);
 
-            List<IWebElement> entries = _webDriver.FindElements(By.XPath("//li"))
-                .Where(x => GetParent(x).GetAttribute("id") == "bodyFake").ToList();
+            List<IWebElement>? entries = _webDriver.FindElements(By.Id("chartImg")).ToList();
 
-            Assert.That(3 == entries.Count);
+            Assert.That(entries, Is.Not.Null);
+
+            Assert.That(entries.Count, Is.EqualTo(1));
 
         }
     }
