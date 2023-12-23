@@ -23,7 +23,8 @@ namespace APV.Service.Controllers
             _logger.LogInformation("Readings controller created.");
         }
 
-        [HttpPost(Name = "SubmitReading")]
+        [HttpPost]
+        [Route("SubmitReading")]
         public string SubmitReading(string? sensorid, int? temperature)
         {
             _logger.LogInformation($"Submitted sensorid {sensorid}, temperature {temperature}  from query parameters");
@@ -60,7 +61,8 @@ namespace APV.Service.Controllers
             }
         }
 
-        [HttpGet(Name = "GetAllLatest")]
+        [HttpGet]
+        [Route("GetAllLatest")]
         public string GetAllLatest()
         {
             _logger.LogInformation($"Getting all latest readings");

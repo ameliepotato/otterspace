@@ -32,7 +32,7 @@ namespace APV.Console.Pages
 
         public void OnGet()
         {
-            List<ReadingModel> unprocessed = _readingsManager.GetReadings() ?? new List<ReadingModel>();
+            List<ReadingModel> unprocessed = _readingsManager.GetAllLatestReadings() ?? new List<ReadingModel>();
             foreach (ReadingModel reading in unprocessed)
             {
                 Readings.Add(SetColor(reading));

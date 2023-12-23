@@ -18,7 +18,7 @@ namespace APV.Service.Database
         public MongoDataManager(ILogger<MongoDataManager> logger, string connection, string database, string collection)
         {
             _logger = logger;
-            _logger.LogInformation($"Mongo database manager connecting to {connection}, database {_database}, collection {_collection}");
+            _logger.LogInformation($"Mongo database manager connecting to {connection}, database {database}, collection {collection}");
             _collection = collection;
             _database = database;
             try

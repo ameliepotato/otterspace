@@ -14,12 +14,12 @@ namespace APV.Console
         {
             _logger = logger;
             _url = url;
-            _logger.LogInformation("ReadingsManager created");
+            _logger.LogInformation($"ReadingsManager created with url {url}");
         }
 
-        public List<ReadingModel>? GetReadings()
+        public List<ReadingModel>? GetAllLatestReadings()
         {
-            var url = _url;
+            var url = _url + "GetAllLatest";
             if (string.IsNullOrEmpty(url))
             {
                 _logger.LogError($"No url to get readings from");

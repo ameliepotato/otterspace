@@ -12,7 +12,7 @@ namespace APV.Console.Tests.Unit.MockImplementations
         public ReadingsManager(List<ReadingModel> readings) {
             _readings = readings;
         }
-        public List<ReadingModel>? GetReadings()
+        public List<ReadingModel>? GetAllLatestReadings()
         {
             return _readings;
         }

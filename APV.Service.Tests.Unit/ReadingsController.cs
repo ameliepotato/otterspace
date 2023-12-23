@@ -94,5 +94,12 @@ namespace APV.Service.Tests.Unit
 
             Assert.IsTrue(result.Contains(expectedResult));
         }
+
+        [TestMethod]
+        [Ignore]
+        public void GetSensorHistorySuccessful()
+        {
+            Assert.Fail();
+        }
     }
 }

@@ -1,0 +1,11 @@
+﻿@page
+@model APV.Console.Pages.SensorHistoryModel
+@{
+    <div id="historyEntries">
+   
+    <div id="chartHistory">
+         <img  id="chartImg" src="https://quickchart.io/chart?c=@(Model.ChartData)"
+            class="fixedimg" >
+    </div>
+    </div>
+}

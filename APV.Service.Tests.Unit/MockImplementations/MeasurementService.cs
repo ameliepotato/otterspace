@@ -1,10 +1,4 @@
 ﻿using APV.Service.Services;
-using Microsoft.AspNetCore.Localization;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace APV.Service.Tests.Unit.MockImplementations
 {

@@ -37,19 +37,19 @@ namespace APV.Console.Tests.UI
                     34°
                 </div>
             </div>*/
-            IWebElement? link = links.Find(x => x.GetAttribute("id") == "One");
+            IWebElement? link = links.Find(x => GetParent(x).GetAttribute("id") == "containerSensorOne");
             Assert.That(link, Is.Not.Null);
             Assert.That(link.GetAttribute("style").Contains("left: 161px; top: 362px;"));
             string color  = link.GetCssValue("background-color");
             Assert.That(color.Length, Is.AtLeast(1));
 
-            link = links.Find(x => x.GetAttribute("id") == "Two");
+            link = links.Find(x => GetParent(x).GetAttribute("id") == "containerSensorTwo");
             Assert.That(link, Is.Not.Null);
             Assert.That(link.GetAttribute("style").Contains("left: 530px; top: 360px"));
             color = link.GetCssValue("background-color");
             Assert.That(color.Length, Is.AtLeast(1));
 
-            link = links.Find(x => x.GetAttribute("id") == "Five");
+            link = links.Find(x => GetParent(x).GetAttribute("id") == "containerSensorFive");
             Assert.That(link, Is.Not.Null);
             Assert.That(link.GetAttribute("style").Contains("left: 664px; top: 538px"));
             color = link.GetCssValue("background-color");

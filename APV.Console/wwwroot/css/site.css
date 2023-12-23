@@ -35,3 +35,15 @@ body {
     border-radius: 50%;
     display: inline-block;
 }
+
+.clickable {
+    cursor: pointer;
+}
+
+.fixedimg {
+    width: 500px;
+    height: 800px;
+    align-content: center;
+    height: 100%;
+    width: 100%;
+}
