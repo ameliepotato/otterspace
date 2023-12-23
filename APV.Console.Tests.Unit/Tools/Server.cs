@@ -9,23 +9,15 @@ using System.Runtime.Serialization.Formatters.Binary;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace APV.Console.Tests.Integration.Tools
+namespace APV.Console.Tests.Unit.Tools
 {
     internal class Server
     {
         private static Dictionary<string, string> _responseData = new Dictionary<string, string>();
-        private static bool Started = false;
-       
-        public static void AddToResponseData(string path, string responsData)
+
+        public static void AddToResponseData(string path, string responseData)
         {
-            if (_responseData.ContainsKey(path))
-            {
-                _responseData[path] = responsData;
-            }
-            else
-            {
-                _responseData.Add(path, responsData);
-            }
+            _responseData.Add(path, responseData);
         }
 
         public static void StartListening(string url)

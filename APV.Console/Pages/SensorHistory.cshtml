@@ -2,10 +2,10 @@
 @model APV.Console.Pages.SensorHistoryModel
 @{
     <div id="historyEntries">
-    @foreach(var entry in Model._entries)
-    {
-        <li> @entry.Temperature was registered on @entry.RegisteredOn
-        </li>
-    }
+   
+    <div id="chartHistory">
+         <img  id="chartImg" src="https://quickchart.io/chart?c=@(Model.ChartData)"
+            class="fixedimg" >
+    </div>
     </div>
 }
