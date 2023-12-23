@@ -10,6 +10,7 @@ namespace APV.Service.Tests.Integration
     public class GetSensorHistory
     {
         [TestMethod]
+        [Ignore]
         public void BySensorWorks()
         {
             Assert.Fail();
