@@ -16,7 +16,7 @@ namespace APV.Service.Services
 
         [BsonDateTimeOptions(Kind = DateTimeKind.Utc)]
 
-        public DateTime? Time { get; set; }
+        public DateTime Time { get; set; }
 
         public string _id { get; set; }
     }

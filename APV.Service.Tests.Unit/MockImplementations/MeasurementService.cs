@@ -20,5 +20,13 @@ namespace APV.Service.Tests.Unit.MockImplementations
         {
             return _measurements.OrderByDescending(m => m.Time).GroupBy(m => m.SensorId)?.Select(x => x.First())?.ToList();
         }
+
+        public List<SensorHistoryEntry>? GetSensorHistory(string sensorId, DateTime from, DateTime? to)
+        {
+            return _measurements.Where( x => x.SensorId == sensorId && x.Time >= from && x.Time <= to)?
+                .Select( x => new SensorHistoryEntry(x))?
+                .ToList();
+            
+        }
     }
 }

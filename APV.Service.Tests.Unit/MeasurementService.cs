@@ -62,7 +62,7 @@ namespace APV.Service.Tests.Unit
 
             measurement.Value = 35;
             measurement._id = Guid.NewGuid().ToString();
-            measurement.Time = measurement.Time?.AddSeconds(1);//to make sure it's more recent
+            measurement.Time = measurement.Time.AddSeconds(1);//to make sure it's more recent
 
             ret = measurementService.AddMeasurement(measurement);
 
@@ -103,7 +103,24 @@ namespace APV.Service.Tests.Unit
         [TestMethod]
         public void GetSensorHistorySuccessful()
         {
+            Services.MeasurementService measurementService =
+                new Services.MeasurementService(_logger,
+                    new Database.MongoDataManager(
+                        _loggerDatabaseManager,
+                        "mongodb://admin:Example@localhost:27017",
+                        "APVServiceTests",
+                        "GetSensorHistorySuccessful" + DateTime.Now.Ticks));
 
+            Measurement measurement = new Measurement("Test", 33);
+            bool ret = measurementService.AddMeasurement(measurement);
+            Assert.IsTrue(ret);
+
+            List<SensorHistoryEntry>? entries = measurementService.GetSensorHistory("Test", DateTime.UtcNow.AddDays(-1), null);
+
+            Assert.IsNotNull(entries);
+            Assert.AreEqual(1, entries.Count);
+            Assert.AreEqual(33, entries.First().Temperature);
+            Assert.IsTrue(DateTime.UtcNow.AddDays(-1) < entries.First().RegisteredOn);
         }
     }
 }

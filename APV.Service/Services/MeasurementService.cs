@@ -1,6 +1,7 @@
 ﻿using APV.Service.Database;
 using MongoDB.Bson;
 using MongoDB.Driver;
+using System.Diagnostics.Metrics;
 
 namespace APV.Service.Services
 {
@@ -71,6 +72,42 @@ namespace APV.Service.Services
                 _logger.LogError($"Add measurement failed with error: {e.Message}");
             }
             return false;
+        }
+
+        public List<SensorHistoryEntry>? GetSensorHistory(string sensorId, DateTime from, DateTime? to)
+        {
+            to = to ?? DateTime.Now;
+            _logger.LogInformation($"Getting sensor {sensorId} history from {from} to {to}");
+            try
+            {
+                IEnumerable<SensorHistoryEntry>? entries = new List<SensorHistoryEntry>();
+                var readingsCollection = _dataManager.GetCollection<Measurement>();
+                List<BsonDocument> pipeline = new List<BsonDocument>();
+
+                IEnumerable<Measurement>? filtered = readingsCollection?.AsQueryable()?
+                    .Where( x => x.SensorId == sensorId &&
+                                x.Time >= from &&
+                                x.Time <= to)?
+                    .OrderByDescending(m => m.Time);
+
+                entries = filtered?.Select(x => new SensorHistoryEntry(x));
+
+                if (entries != null)
+                {
+                    _logger.LogInformation($"Found {entries.Count()} results");
+                }
+                else
+                {
+                    _logger.LogWarning("No data found.");
+                }
+                return entries?.ToList();
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Error when retrieving measurements: {ex.Message}");
+            }
+            _logger.LogWarning("No history entry found");
+            return null;
         }
 
         public bool CreateIndex()

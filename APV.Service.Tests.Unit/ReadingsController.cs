@@ -96,10 +96,30 @@ namespace APV.Service.Tests.Unit
         }
 
         [TestMethod]
-        [Ignore]
         public void GetSensorHistorySuccessful()
         {
-            Assert.Fail();
+            // Arrange
+            MockImplementations.SensorService ss = new MockImplementations.SensorService(new List<Services.Sensor>()
+            {
+                new Services.Sensor("one", new Tuple<int, int>(0,0), null),
+                new Services.Sensor("two", new Tuple<int, int>(0,0), null)
+            });
+            DateTime date = DateTime.UtcNow;
+
+            Controllers.ReadingsController controller =
+                new Controllers.ReadingsController(_loggerController, ss,
+                    new MockImplementations.MeasurementService(new List<Services.Measurement>()
+                    {
+                        new Measurement("one", 22, date),
+                        new Measurement("one", 45, date.AddDays(-1)),
+                        new Measurement("two", 33, date)
+                    }));
+            string output = $"{{\"Temperature\":22,\"RegisteredOn\":";
+
+            // Act
+            string result = controller.GetSensorHistory("one", DateTime.UtcNow.AddMinutes(-10));
+
+            Assert.IsTrue(result.Contains(output));
         }
     }
 }

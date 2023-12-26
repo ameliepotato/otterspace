@@ -91,7 +91,7 @@ namespace APV.Service.Controllers
                         PositionX = sensor.Position.Item1,
                         PositionY = sensor.Position.Item2,
                         Value = measurement.Value,
-                        Time = measurement.Time??DateTime.MinValue
+                        Time = measurement.Time
                     };
                     _logger.LogInformation($"Adding reading: {reading.SensorId} - {reading.Value} - {reading.Time}");
                     readings.Add(reading);
@@ -99,6 +99,18 @@ namespace APV.Service.Controllers
             }
             _logger.LogInformation($"Found {readings.Count} readings");
             return JsonSerializer.Serialize(readings);
+        }
+
+        [HttpGet]
+        [Route("GetSensorHistory")]
+        public string GetSensorHistory(string sensorId, DateTime from, DateTime? to = null)
+        {
+            to = to ?? DateTime.Now;
+            _logger.LogInformation($"Getting sensor history for {sensorId}, from: {from} to : {to}");
+             List<SensorHistoryEntry> sensorHistory = _measurementService.GetSensorHistory(sensorId, from, to) ?? 
+                new List<SensorHistoryEntry>();
+            _logger.LogInformation($"Found {sensorHistory.Count} readings");
+            return JsonSerializer.Serialize(sensorHistory);
         }
     }
 }
