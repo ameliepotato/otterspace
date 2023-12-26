@@ -98,7 +98,6 @@ namespace APV.Console.Tests.Integration
 
             Assert.That(entries.Count, Is.EqualTo(1));
 
-            task.Wait();
         }
     }
 }
