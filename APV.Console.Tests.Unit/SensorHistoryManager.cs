@@ -44,11 +44,13 @@ namespace APV.Console.Tests.Unit
             string data = JsonSerializer.Serialize(list);
 
 
-            Tools.Server.AddToResponseData("GetSensorHistory", data);
+            Tools.Server server = new Tools.Server();
+            
+            server.AddToResponseData("GetSensorHistory", data);
 
             Task task = Task.Run(() =>
             {
-                Tools.Server.StartListening(fakeApi);
+                server.StartListening(fakeApi);
             });
 
             List<SensorHistoryEntryModel>? entries = 

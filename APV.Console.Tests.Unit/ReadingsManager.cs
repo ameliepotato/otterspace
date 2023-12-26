@@ -51,12 +51,13 @@ namespace APV.Console.Tests.Unit
 
             string data = JsonSerializer.Serialize(list);
 
-
-            Tools.Server.AddToResponseData("GetAllLatest", data);
+            Tools.Server server = new Tools.Server();
+            
+            server.AddToResponseData("GetAllLatest", data);
 
             Task task = Task.Run(() =>
             {
-                Tools.Server.StartListening(fakeApi);
+                server.StartListening(fakeApi);
             });
             
 

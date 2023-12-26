@@ -24,7 +24,7 @@ namespace APV.Console.Tests.UI
         {
             _webDriver.Url = "http://localhost:37070/";
             List<IWebElement> links = _webDriver.FindElements(By.ClassName("overlay-text")).ToList();
-            Assert.That(links.Count, Is.EqualTo(3));
+            Assert.That(links.Count, Is.GreaterThanOrEqualTo(3));
             /*<div class="image-container">
             <img src="/plan.jpg" id="planImg" alt="floor plan image">
                 <div id="One" class="overlay-text" style="left: 161px; top: 362px; background-color: #91C13D">

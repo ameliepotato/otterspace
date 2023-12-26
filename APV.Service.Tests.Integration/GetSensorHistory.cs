@@ -20,9 +20,9 @@ namespace APV.Service.Tests.Integration
         {
             Dictionary<string, object> postParams = new Dictionary<string, object>();
 
-            DateTime start = DateTime.UtcNow.AddMinutes(-1);
+            DateTime start = DateTime.UtcNow.AddSeconds(-1);
 
-            postParams.Add("sensorid", "Five");
+            postParams.Add("sensorid", "Six");
             postParams.Add("temperature", 22);
 
             string response = Request.Post(apiLocationPost, postParams);
@@ -35,9 +35,9 @@ namespace APV.Service.Tests.Integration
 
             Assert.AreEqual("true", response.ToLower());
 
-            DateTime end = DateTime.UtcNow.AddMinutes(1);
+            DateTime end = DateTime.UtcNow.AddSeconds(1);
 
-            response = Request.Get($"{apiLocationGet}?sensorId=Five&from={start}&to={end}");
+            response = Request.Get($"{apiLocationGet}?sensorId=Six&from={start}&to={end}");
 
             List<JsonDocument> list = JsonSerializer.Deserialize<List<JsonDocument>>(response) ?? new List<JsonDocument>();
 

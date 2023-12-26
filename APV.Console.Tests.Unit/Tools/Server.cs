@@ -13,14 +13,14 @@ namespace APV.Console.Tests.Unit.Tools
 {
     internal class Server
     {
-        private static Dictionary<string, string> _responseData = new Dictionary<string, string>();
+        private Dictionary<string, string> _responseData = new Dictionary<string, string>();
 
-        public static void AddToResponseData(string path, string responseData)
+        public void AddToResponseData(string path, string responseData)
         {
             _responseData.Add(path, responseData);
         }
 
-        public static void StartListening(string url)
+        public void StartListening(string url)
         {
             if (!HttpListener.IsSupported)
             {
