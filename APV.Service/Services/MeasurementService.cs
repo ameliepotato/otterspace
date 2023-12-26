@@ -80,17 +80,19 @@ namespace APV.Service.Services
             _logger.LogInformation($"Getting sensor {sensorId} history from {from} to {to}");
             try
             {
-                IEnumerable<SensorHistoryEntry>? entries = new List<SensorHistoryEntry>();
                 var readingsCollection = _dataManager.GetCollection<Measurement>();
                 List<BsonDocument> pipeline = new List<BsonDocument>();
 
-                IEnumerable<Measurement>? filtered = readingsCollection?.AsQueryable()?
+                IEnumerable<SensorHistoryEntry>? entries = readingsCollection?.AsQueryable()?
                     .Where( x => x.SensorId == sensorId &&
                                 x.Time >= from &&
                                 x.Time <= to)?
-                    .OrderByDescending(m => m.Time);
-
-                entries = filtered?.Select(x => new SensorHistoryEntry(x));
+                    .OrderByDescending(m => m.Time)?
+                    .Select(s => new SensorHistoryEntry()
+                    {
+                        Temperature = s.Value,
+                        RegisteredOn = s.Time
+                    });
 
                 if (entries != null)
                 {

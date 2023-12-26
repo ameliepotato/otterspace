@@ -24,7 +24,11 @@ namespace APV.Service.Tests.Unit.MockImplementations
         public List<SensorHistoryEntry>? GetSensorHistory(string sensorId, DateTime from, DateTime? to)
         {
             return _measurements.Where( x => x.SensorId == sensorId && x.Time >= from && x.Time <= to)?
-                .Select( x => new SensorHistoryEntry(x))?
+                .Select( x => new SensorHistoryEntry()
+                {
+                    Temperature = x.Value,
+                    RegisteredOn = x.Time
+                })?
                 .ToList();
             
         }
