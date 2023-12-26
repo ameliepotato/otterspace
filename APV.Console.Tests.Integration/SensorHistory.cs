@@ -91,7 +91,7 @@ namespace APV.Console.Tests.Integration
 
             Thread.Sleep(3000);
 
-            List<IWebElement>? entries = _webDriver.FindElements(By.Id("chartImg")).ToList();
+            List<IWebElement>? entries = _webDriver.FindElements(By.Id("chartImgFake")).ToList();
 
             Assert.That(entries, Is.Not.Null);
 

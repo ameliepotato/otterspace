@@ -36,7 +36,7 @@ namespace APV.Console.Tests.UI
 
             Assert.That(entry, Is.Not.Null);
 
-            entries = _webDriver.FindElements(By.Id("chartImg")).ToList();
+            entries = _webDriver.FindElements(By.Id("chartImgOne")).ToList();
 
             Assert.That(entries.Count, Is.EqualTo(1));
 
