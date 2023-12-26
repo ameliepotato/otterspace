@@ -22,7 +22,7 @@ namespace APV.Console.Tests.UI
         [TearDown]
         public void CloseBrowser()
         {
-            _webDriver.Close();
+            _webDriver.Quit();
         }
 
         public static IWebElement GetParent(IWebElement e)
