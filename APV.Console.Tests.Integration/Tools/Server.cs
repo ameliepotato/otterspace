@@ -13,10 +13,10 @@ namespace APV.Console.Tests.Integration.Tools
 {
     internal class Server
     {
-        private static Dictionary<string, string> _responseData = new Dictionary<string, string>();
-        private static bool Started = false;
+        private Dictionary<string, string> _responseData = new Dictionary<string, string>();
+        private bool Started = false;
        
-        public static void AddToResponseData(string path, string responsData)
+        public void AddToResponseData(string path, string responsData)
         {
             if (_responseData.ContainsKey(path))
             {
@@ -28,7 +28,7 @@ namespace APV.Console.Tests.Integration.Tools
             }
         }
 
-        public static void StartListening(string url)
+        public void StartListening(string url)
         {
             if (!HttpListener.IsSupported)
             {

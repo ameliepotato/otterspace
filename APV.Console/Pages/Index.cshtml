@@ -3,31 +3,6 @@
 @{
     ViewData["Title"] = "Home Temperatures";
 }
-<script type="text/javascript">
-
-    function OnHistoryModal(sensorId) {
-        var outputElement = document.getElementById('body' + sensorId);
-
-        fetch('SensorHistory?sensorID=' + sensorId)
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error('Network response was not ok');
-                }
-                return response.text();
-            })
-            .then(data => {
-                var parser = new DOMParser();
-                var doc = parser.parseFromString(data, "text/html");   
-                loadChart(sensorId);
-                //outputElement.innerHTML = doc.querySelector('#historyEntries').innerHTML;
-            })
-            .catch(error => {
-                console.error('Error:', error);
-            });
-
-        $('#historyModal' + sensorId).modal('show');
-    }
-</script>
 <div class="text-center">
     @if (Model.Readings != null && Model.Readings.Count > 0)
     {
@@ -40,7 +15,7 @@
             {
                 <div id="containerSensor@(reading.SensorId)">
                     <div class="overlay-text clickable" id="btn@(reading.SensorId)"
-                        style="left: @(reading.PositionX)px; top: @(reading.PositionY)px; background-color: @reading.ColorCode" onclick="OnHistoryModal('@reading.SensorId')">
+                        style="left: @(reading.PositionX)px; top: @(reading.PositionY)px; background-color: @reading.ColorCode" onclick="onHistoryModal('@reading.SensorId')">
                         @Html.Encode(@reading.Value)&deg;
                     </div>
                     <div id="history@(reading.SensorId)">
@@ -55,12 +30,10 @@
                                         </button>
                                     </div>
                                     <div class="modal-body" id="body@(reading.SensorId)">
-                                        <div id="historyEntries">
                                             <div id="chartHistory">
                                                 <canvas id="chartImg@(reading.SensorId)" width="400" height="400">
                                                     </canvas>
                                             </div>
-                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -76,3 +49,5 @@
         <img src="~/plan.jpg" id="planImg" alt="floor plan image">
     }
 </div>
+<script src="~/js/onHistoryModal.js" asp-append-version="true"></script>
+<script src="~/js/chartHistory.js" asp-append-version="true"></script>

@@ -18,10 +18,11 @@ namespace APV.Console.Tests.Integration
             List<object> list = new List<object>();
             list.Add(reading);
             string data = JsonSerializer.Serialize(list);
-            Tools.Server.AddToResponseData("GetAllLatest", data);
+            Tools.Server server = new Tools.Server();
+            server.AddToResponseData("GetAllLatest", data);
             Task task = Task.Run(() =>
             {
-                Tools.Server.StartListening($"http://{IPREADINGSSERVICE}:{PORTREADINGSSERVICE}/Readings/");
+                server.StartListening($"http://{IPREADINGSSERVICE}:{PORTREADINGSSERVICE}/Readings/");
             });
             _webDriver.Url = $"http://{IPWEBSITE}:{PORTWEBSITE}";
             IWebElement myReading = _webDriver.FindElement(By.Id("containerSensorFake"));
@@ -35,10 +36,11 @@ namespace APV.Console.Tests.Integration
         public void NoReadingsErrorMessageAppers()
         {
             string data = JsonSerializer.Serialize(new List<object>());
-            Tools.Server.AddToResponseData("GetAllLatest", data);
+            Tools.Server server = new Tools.Server();
+            server.AddToResponseData("GetAllLatest", data);
             Task task = Task.Run(() =>
             {
-                Tools.Server.StartListening($"http://{IPREADINGSSERVICE}:{PORTREADINGSSERVICE}/Readings/");
+                server.StartListening($"http://{IPREADINGSSERVICE}:{PORTREADINGSSERVICE}/Readings/");
             });
             _webDriver.Url = $"http://{IPWEBSITE}:{PORTWEBSITE}";
             IWebElement myReading = _webDriver.FindElement(By.Id("error"));
