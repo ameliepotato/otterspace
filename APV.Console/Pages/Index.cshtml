@@ -17,8 +17,9 @@
             })
             .then(data => {
                 var parser = new DOMParser();
-                var doc = parser.parseFromString(data, "text/html");               
-                outputElement.innerHTML = doc.querySelector('#historyEntries').innerHTML;
+                var doc = parser.parseFromString(data, "text/html");   
+                loadChart(sensorId);
+                //outputElement.innerHTML = doc.querySelector('#historyEntries').innerHTML;
             })
             .catch(error => {
                 console.error('Error:', error);
@@ -54,6 +55,12 @@
                                         </button>
                                     </div>
                                     <div class="modal-body" id="body@(reading.SensorId)">
+                                        <div id="historyEntries">
+                                            <div id="chartHistory">
+                                                <canvas id="chartImg@(reading.SensorId)" width="400" height="400">
+                                                    </canvas>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>

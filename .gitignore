@@ -24,3 +24,4 @@
 /APV.Console.Tests.Integration/obj
 /APV.Console.Tests.Unit/bin/Debug/net7.0
 /APV.Console.Tests.Unit/obj
+/APV.Console/node_modules/chart.js
