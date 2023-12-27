@@ -11,7 +11,9 @@
         .then(data => {
             var parser = new DOMParser();
             var doc = parser.parseFromString(data, "text/html");
-            loadChart(sensorId);
+
+            var chartData = JSON.parse(doc.getElementById('newChartData').innerHTML);
+            loadChart(sensorId, chartData);
             //outputElement.innerHTML = doc.querySelector('#historyEntries').innerHTML;
         })
         .catch(error => {

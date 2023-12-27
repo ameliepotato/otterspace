@@ -1,6 +1,8 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using System.Globalization;
+using System.Reflection.Emit;
+using System.Text.Json;
 
 namespace APV.Console.Pages
 {
@@ -27,24 +29,25 @@ namespace APV.Console.Pages
                 new List<SensorHistoryEntryModel>();
             _logger.LogInformation($"Found {Entries.Count} entries");
             Entries = Entries.OrderBy(x => x.RegisteredOn).ToList();
-            ChartData = GetChartInfo(Entries).ToUrl();
+            ChartData = JsonSerializer.Serialize(GetChartInfo(Entries));
             _logger.LogInformation($"Chart data is {ChartData}");
         }
 
         [NonHandler]
-        public static ChartInfo GetChartInfo(List<SensorHistoryEntryModel> entries)
+        public static ChartInfo GetChartInfo(IEnumerable<SensorHistoryEntryModel> entries)
         {
-            ChartInfo chartInfo = new ChartInfo();
-            chartInfo.type = "line";
-            chartInfo.data = new dataChart()
-            {
-                labels = entries.Select(x => x.RegisteredOn.ToShortDateString()).ToList()
+            ChartInfo chartInfo = new ChartInfo() {
+                labels = entries.Select(x => x.RegisteredOn.ToShortDateString()).ToArray()
             };
-            chartInfo.datasets = new dataSetChart()
+
+            ChartData chartData = new ChartData()
             {
-                data = entries.Select(x => x.Temperature).ToList(),
-                label = "Temperatures",
+                data = entries.Select(x => x.Temperature).ToArray(),
+                label = "Temperatures"
             };
+
+            chartInfo.datasets = new ChartData[1] { chartData };
+            
             return chartInfo;
         }
     }

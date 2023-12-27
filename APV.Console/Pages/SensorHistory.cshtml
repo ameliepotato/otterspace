@@ -1,6 +1,5 @@
 ﻿@page
 @model APV.Console.Pages.SensorHistoryModel
-@{
-    <div id="historyEntries">
-    </div>
-}
+<div id = "newChartData">
+@Html.Raw(Model.ChartData)
+</div>
