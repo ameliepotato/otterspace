@@ -12,7 +12,7 @@ namespace APV.Console.Tests.Integration
             List<object> list = new List<object>();
             var reading = new
             {
-                SensorId = "Fake",
+                SensorId = "Fake1",
                 Value = 45,
                 PositionX = 2,
                 PositionY = 3,
@@ -22,7 +22,7 @@ namespace APV.Console.Tests.Integration
 
             reading = new
             {
-                SensorId = "Fake",
+                SensorId = "Fake2",
                 Value = 22,
                 PositionX = 2,
                 PositionY = 3,
@@ -32,7 +32,7 @@ namespace APV.Console.Tests.Integration
 
             reading = new
             {
-                SensorId = "Fake",
+                SensorId = "Fake3",
                 Value = 20,
                 PositionX = 2,
                 PositionY = 3,
@@ -42,7 +42,7 @@ namespace APV.Console.Tests.Integration
 
             reading = new
             {
-                SensorId = "Fake",
+                SensorId = "Fake4",
                 Value = 21,
                 PositionX = 2,
                 PositionY = 3,
@@ -51,8 +51,9 @@ namespace APV.Console.Tests.Integration
             list.Add(reading);
 
             string data = JsonSerializer.Serialize(list);
-            
-            Tools.Server.AddToResponseData("GetAllLatest", data);                       
+
+            Tools.Server server = new Tools.Server();
+            server.AddToResponseData("GetAllLatest", data);                       
            
 
             list.Clear();
@@ -74,15 +75,15 @@ namespace APV.Console.Tests.Integration
 
             data = JsonSerializer.Serialize(list);
 
-            Tools.Server.AddToResponseData("GetSensorHistory?sensorId=Fake", data);
+            server.AddToResponseData("GetSensorHistory?sensorId=Fake1", data);
 
             Task task = Task.Run(() =>
             {
-                Tools.Server.StartListening($"http://{IPREADINGSSERVICE}:{PORTREADINGSSERVICE}/Readings/");
+                server.StartListening($"http://{IPREADINGSSERVICE}:{PORTREADINGSSERVICE}/Readings/");
             });
 
             _webDriver.Url = $"http://{IPWEBSITE}:{PORTWEBSITE}";
-            IWebElement myReading = _webDriver.FindElement(By.Id("btnFake"));
+            IWebElement myReading = _webDriver.FindElement(By.Id("btnFake1"));
 
             Assert.That(myReading, Is.Not.Null);
 
@@ -91,7 +92,7 @@ namespace APV.Console.Tests.Integration
 
             Thread.Sleep(3000);
 
-            List<IWebElement>? entries = _webDriver.FindElements(By.Id("chartImg")).ToList();
+            List<IWebElement>? entries = _webDriver.FindElements(By.Id("chartImgFake1")).ToList();
 
             Assert.That(entries, Is.Not.Null);
 

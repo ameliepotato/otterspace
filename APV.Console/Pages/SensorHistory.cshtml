@@ -1,11 +1,5 @@
 ﻿@page
 @model APV.Console.Pages.SensorHistoryModel
-@{
-    <div id="historyEntries">
-   
-    <div id="chartHistory">
-         <img alt="history of temperatures" id="chartImg" src="https://quickchart.io/chart?c=@(Model.ChartData)"
-            class="fixedimg" >
-    </div>
-    </div>
-}
+<div id = "newChartData">
+@Html.Raw(Model.ChartData)
+</div>
