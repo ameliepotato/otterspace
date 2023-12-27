@@ -15,7 +15,7 @@ namespace APV.Console
 
     public class ChartInfo
     {
-        public string[] labels { get; set; }
+        public DateTime[] labels { get; set; }
         public ChartData[] datasets { get; set; }
 
     }

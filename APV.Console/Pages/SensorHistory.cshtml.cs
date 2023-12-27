@@ -28,7 +28,7 @@ namespace APV.Console.Pages
             Entries = _historyManager.GetSensorHistory(sensorId, DateTime.UtcNow.AddDays(-3), DateTime.UtcNow) ??
                 new List<SensorHistoryEntryModel>();
             _logger.LogInformation($"Found {Entries.Count} entries");
-            Entries = Entries.OrderBy(x => x.RegisteredOn).ToList();
+            Entries = Entries.OrderBy(x => x.RegisteredOn).Take(30).ToList();
             ChartData = JsonSerializer.Serialize(GetChartInfo(Entries));
             _logger.LogInformation($"Chart data is {ChartData}");
         }
@@ -37,13 +37,13 @@ namespace APV.Console.Pages
         public static ChartInfo GetChartInfo(IEnumerable<SensorHistoryEntryModel> entries)
         {
             ChartInfo chartInfo = new ChartInfo() {
-                labels = entries.Select(x => x.RegisteredOn.ToShortDateString()).ToArray()
+                labels = entries.Select(x => x.RegisteredOn).ToArray()
             };
 
             ChartData chartData = new ChartData()
             {
                 data = entries.Select(x => x.Temperature).ToArray(),
-                label = "Temperatures"
+                label = "Temperature"
             };
 
             chartInfo.datasets = new ChartData[1] { chartData };
