@@ -1,5 +1,6 @@
 ﻿using System.Diagnostics;
 using System.Text.Json;
+using WireMock.RequestBuilders;
 
 namespace APV.Console.Tests.Integration
 {
@@ -52,9 +53,8 @@ namespace APV.Console.Tests.Integration
 
             string data = JsonSerializer.Serialize(list);
 
-            Tools.Server server = new Tools.Server();
-            server.AddToResponseData("GetAllLatest", data);                       
-           
+            _server.Given(Request.Create().UsingGet().WithPath("/Readings/GetAllLatest"))
+               .RespondWith(WireMock.ResponseBuilders.Response.Create().WithBody(data));
 
             list.Clear();
             list.Add(new { 
@@ -75,14 +75,11 @@ namespace APV.Console.Tests.Integration
 
             data = JsonSerializer.Serialize(list);
 
-            server.AddToResponseData("GetSensorHistory?sensorId=Fake1", data);
+            _server.Given(Request.Create().UsingGet().WithPath("GetSensorHistory?sensorId=Fake1"))
+              .RespondWith(WireMock.ResponseBuilders.Response.Create().WithBody(data));
 
-            Task task = Task.Run(() =>
-            {
-                server.StartListening($"http://{IPREADINGSSERVICE}:{PORTREADINGSSERVICE}/Readings/");
-            });
 
-            _webDriver.Url = $"http://{IPWEBSITE}:{PORTWEBSITE}";
+            _webDriver.Url = WEBSITEURL;
             IWebElement myReading = _webDriver.FindElement(By.Id("btnFake1"));
 
             Assert.That(myReading, Is.Not.Null);
