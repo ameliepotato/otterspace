@@ -64,6 +64,8 @@ namespace APV.Console.Tests.Unit
 
             Assert.That(entries.Count, Is.EqualTo(2));
 
+            server.Stop();
+
         }
     }
 }
