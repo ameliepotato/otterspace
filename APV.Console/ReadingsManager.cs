@@ -19,7 +19,7 @@ namespace APV.Console
 
         public List<ReadingModel>? GetAllLatestReadings()
         {
-            var url = _url + "GetAllLatest";
+            var url = _url + "Readings/GetAllLatest";
             if (string.IsNullOrEmpty(url))
             {
                 _logger.LogError($"No url to get readings from");

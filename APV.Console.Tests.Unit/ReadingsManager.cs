@@ -1,17 +1,14 @@
 ﻿using Microsoft.Extensions.Logging;
-using NUnit.Framework;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Security.Cryptography.X509Certificates;
-using System.Text;
 using System.Text.Json;
-using System.Threading.Tasks;
-using static System.Runtime.InteropServices.JavaScript.JSType;
+using WireMock.Logging;
+using WireMock.RequestBuilders;
+using WireMock.ResponseBuilders;
+using WireMock.Server;
+using WireMock.Settings;
 
 namespace APV.Console.Tests.Unit
 {
-    public class ReadingsManager
+    public class ReadingsManager 
     {
         ILogger<Console.ReadingsManager> _logger;
         [SetUp]
@@ -51,15 +48,14 @@ namespace APV.Console.Tests.Unit
 
             string data = JsonSerializer.Serialize(list);
 
-            Tools.Server server = new Tools.Server();
-            
-            server.AddToResponseData("GetAllLatest", data);
-
-            Task task = Task.Run(() =>
+            var server = WireMockServer.Start(new WireMockServerSettings
             {
-                server.StartListening(fakeApi);
+                Logger = new WireMockConsoleLogger(),
+                Urls = new string[] { fakeApi }
             });
-            
+
+            server.Given(Request.Create().UsingGet().WithPath("/Readings/GetAllLatest"))
+                .RespondWith(Response.Create().WithBody(data));            
 
             List<ReadingModel>? latest = readingsManager.GetAllLatestReadings();
 
@@ -74,6 +70,14 @@ namespace APV.Console.Tests.Unit
             Assert.That(latest.OrderByDescending(s => s.Time).ToList()[0].SensorId, Is.EqualTo(latest[0].SensorId));
 
             Assert.That(latest.OrderByDescending(s => s.Time).ToList().Last().SensorId, Is.EqualTo(latest.Last().SensorId));
+
+            server.Stop();
+        }
+
+        [TearDown]
+        public void TearDown()
+        {
+
         }
     }
 }
