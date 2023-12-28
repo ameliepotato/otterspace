@@ -14,7 +14,6 @@ namespace APV.Console.Tests.UI
         [Test]
         public void DialogShowsOnCLickAndClosesWithX()
         {
-            int timeout = 20000;//20 seconds
             _webDriver.Url = "http://localhost:37070/";
             List<IWebElement> links = _webDriver.FindElements(By.Id("btnOne")).ToList();
             Assert.That(links.Count, Is.EqualTo(1));

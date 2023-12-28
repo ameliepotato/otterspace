@@ -9,12 +9,12 @@ namespace APV.Console.Tests.Integration
     [TestFixture]
     public class WebTest
     {
-        protected const string WEBSITEURL = "http://localhost:26080/";
-        protected const string MOCKSERVERURL = "http://localhost:37010/";
+        protected const string WEBSITEURL =     "http://localhost:26080/";
+        protected const string MOCKSERVERURL =  "http://localhost:37010/";
 
         protected IWebDriver _webDriver { get; set; }
 
-        protected WireMockServer _server { get; set; }
+        protected WireMockServer _mockServer { get; set; }
         
         
         [SetUp]
@@ -23,7 +23,7 @@ namespace APV.Console.Tests.Integration
             string driverPath = Environment.GetEnvironmentVariable("CHROMEDRIVERPATH_UITESTS") ??
                 Directory.GetCurrentDirectory() + Path.DirectorySeparatorChar + "Drivers";
             _webDriver = new ChromeDriver(driverPath);
-            _server = WireMockServer.Start(new WireMockServerSettings
+            _mockServer = WireMockServer.Start(new WireMockServerSettings
             {
                 Logger = new WireMockConsoleLogger(),
                 Urls = new string[] { MOCKSERVERURL }
@@ -34,7 +34,7 @@ namespace APV.Console.Tests.Integration
         public void TearDown()
         {
             _webDriver.Quit();
-            _server.Stop();
+            _mockServer.Stop();
         }
 
         public static IWebElement GetParent(IWebElement e)

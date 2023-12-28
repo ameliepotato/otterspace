@@ -53,7 +53,7 @@ namespace APV.Console.Tests.Integration
 
             string data = JsonSerializer.Serialize(list);
 
-            _server.Given(Request.Create().UsingGet().WithPath("/Readings/GetAllLatest"))
+            _mockServer.Given(Request.Create().UsingGet().WithPath("/Readings/GetAllLatest"))
                .RespondWith(WireMock.ResponseBuilders.Response.Create().WithBody(data));
 
             list.Clear();
@@ -75,7 +75,7 @@ namespace APV.Console.Tests.Integration
 
             data = JsonSerializer.Serialize(list);
 
-            _server.Given(Request.Create().UsingGet().WithPath("GetSensorHistory?sensorId=Fake1"))
+            _mockServer.Given(Request.Create().UsingGet().WithPath("GetSensorHistory?sensorId=Fake1"))
               .RespondWith(WireMock.ResponseBuilders.Response.Create().WithBody(data));
 
 

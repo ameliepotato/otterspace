@@ -20,7 +20,7 @@ namespace APV.Console.Tests.Integration
             list.Add(reading);
             string data = JsonSerializer.Serialize(list);
 
-            _server.Given(Request.Create().UsingGet().WithPath("/Readings/GetAllLatest"))
+            _mockServer.Given(Request.Create().UsingGet().WithPath("/Readings/GetAllLatest"))
                 .RespondWith(WireMock.ResponseBuilders.Response.Create().WithBody(data));
 
             _webDriver.Url = WEBSITEURL;
@@ -36,7 +36,7 @@ namespace APV.Console.Tests.Integration
         {
             string data = JsonSerializer.Serialize(new List<object>());
 
-            _server.Given(Request.Create().UsingGet().WithPath("/Readings/GetAllLatest"))
+            _mockServer.Given(Request.Create().UsingGet().WithPath("/Readings/GetAllLatest"))
                .RespondWith(WireMock.ResponseBuilders.Response.Create().WithBody(data));
 
             _webDriver.Url = WEBSITEURL;
