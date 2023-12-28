@@ -25,7 +25,7 @@ namespace APV.Service.Tests.Integration
             Assert.AreEqual("true", response.ToLower());
 
             postParams["sensorid"] = "Two";
-            postParams["temperature"] = 34;
+            postParams["temperature"] = 33;
 
             response = Request.Post(apiLocationPost, postParams);
 
@@ -46,7 +46,7 @@ namespace APV.Service.Tests.Integration
             var two = list.Where(x => ObjectProperties.IsPropertyValueEqual(x, "SensorId", "Two")).FirstOrDefault();
 
             Assert.IsNotNull(two);
-            Assert.IsTrue(ObjectProperties.IsPropertyValueEqual(two, "Value", 34));
+            Assert.IsTrue(ObjectProperties.IsPropertyValueEqual(two, "Value", 33));
 
         }
 
@@ -62,7 +62,7 @@ namespace APV.Service.Tests.Integration
 
             Assert.AreEqual("true", response.ToLower());
 
-            postParams["temperature"] = 34;
+            postParams["temperature"] = 30;
 
             response = Request.Post(apiLocationPost, postParams);
 
@@ -83,7 +83,7 @@ namespace APV.Service.Tests.Integration
 
             Assert.IsNotNull(latest);
 
-            Assert.AreEqual(34, ObjectProperties.GetPropertyValue<int>(latest, "Value"));
+            Assert.AreEqual(30, ObjectProperties.GetPropertyValue<int>(latest, "Value"));
         }
     }
 }

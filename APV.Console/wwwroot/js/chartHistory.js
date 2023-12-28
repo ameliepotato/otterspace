@@ -5,7 +5,15 @@ function loadChart(sensorId, chartData) {
         type: 'line',
         data: chartData,
         options: {
-            // additional configuration options
+            resposive: true,
+            scales: {
+                x: {
+                    type: 'time',
+                    time: {
+                        unit: 'day'
+                    }
+                }
+            }
         }
     });
 }
