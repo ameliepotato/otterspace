@@ -2,9 +2,14 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Text.Json;
-using System.Threading.Tasks;
+using WireMock.Logging;
+using WireMock.RequestBuilders;
+using WireMock.ResponseBuilders;
+using WireMock.Server;
+using WireMock.Settings;
 
 namespace APV.Console.Tests.Unit
 {
@@ -43,15 +48,14 @@ namespace APV.Console.Tests.Unit
 
             string data = JsonSerializer.Serialize(list);
 
-
-            Tools.Server server = new Tools.Server();
-            
-            server.AddToResponseData("GetSensorHistory", data);
-
-            Task task = Task.Run(() =>
+            var server = WireMockServer.Start(new WireMockServerSettings
             {
-                server.StartListening(fakeApi);
+                Logger = new WireMockConsoleLogger(),
+                Urls = new string[] { fakeApi }
             });
+
+            server.Given(Request.Create().UsingGet().WithPath("/Readings/GetSensorHistory"))
+                .RespondWith(Response.Create().WithBody(data));
 
             List<SensorHistoryEntryModel>? entries = 
                 historyManager.GetSensorHistory("Fake", DateTime.MinValue, null);

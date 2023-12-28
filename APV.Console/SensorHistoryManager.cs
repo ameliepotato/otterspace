@@ -27,7 +27,7 @@ namespace APV.Console
 
         public List<SensorHistoryEntryModel>? GetSensorHistory(string sensorId, DateTime from, DateTime? to)
         {
-            var url = $"{_url}GetSensorHistory?sensorId={sensorId}";
+            var url = $"{_url}Readings/GetSensorHistory?sensorId={sensorId}";
             if (string.IsNullOrEmpty(url))
             {
                 _logger.LogError($"No url to get history from");
