@@ -1,0 +1,36 @@
+.App {
+  text-align: left;
+}
+
+.App-logo {
+  pointer-events: none;
+}
+
+.App-button-bar {
+  margin-top: 25px;
+  margin-bottom: 25px;
+}
+
+.App-header {
+  margin-top: 25px;
+  background-color: #ffffff;
+  font-size: calc(10px + 2vmin);
+  color: rgb(0, 0, 0);
+}
+
+.App-link {
+  color: #61dafb;
+}
+
+.btn-right {
+  float: right;
+  margin-left: 50px;
+  margin-right: 50px;
+  margin-bottom: 50px;
+}
+
+.btn-left {
+  margin-left: 50px;
+  margin-right: 50px;
+  margin-bottom: 50px;
+}
