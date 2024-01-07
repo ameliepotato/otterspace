@@ -1,32 +1,75 @@
-import React from 'react';
-import planjpg from './plan.jpg';
+import React, { useState } from 'react';
 import Sensor from './Sensor';
+import { HiArrowDown, HiArrowRight, HiCursorClick } from 'react-icons/hi';
+import { color } from '@mui/system';
 
 function Sensors(props) {
+    const [cursorPosition, setCursorPosition] = useState({ x: 0, y: 0 });
+    function onCursor(event) {
+        setCursorPosition({ x: event.nativeEvent.offsetX, y: event.nativeEvent.offsetY });
+    }
     return (
         <>
-            <div id="sensors"
-                style={{
-                    backgroundImage: `url(${planjpg})`,
-                    backgroundRepeat: 'no-repeat',
-                    backgroundSize: 'cover',
-                    width: '842px',
-                    height: '569px'
-                }}
-                onClick={(x) => {
-                    x.stopPropagation();
-                    props.onSelection(x, null);
+            <div>
+            <div style={{
+                    color: 'blue'
                 }}>
-                {props.sensors.map((sensor, index) => (
-                    <div key={index} id={"sensor" + sensor.sensorId}
+                    <i>
+                        {props.plan.height}px
+                        <HiArrowDown></HiArrowDown>
+
+                    </i>
+                </div>
+
+                <div id="sensors"
+                    style={{
+                        backgroundImage: `url(${props.plan.src})`,
+                        backgroundRepeat: 'no-repeat',
+                        backgroundSize: 'cover',
+                        width: props.plan.width + 'px',
+                        height: props.plan.height + 'px',
+                        position: 'relative'
+                    }}
+                    onClick={(x) => {
+                        x.stopPropagation();
+                        onCursor(x);
+                        props.onSelection(x, null);
+                    }}>
+                    {(cursorPosition.x>0 || cursorPosition.y>0) && 
+                    <h1 id="cursor"
                         style={{
-                            position: 'relative',
-                            left: sensor.positionX,
-                            top: sensor.positionY,
-                            float: 'left'
-                        }}>
-                        <Sensor sensor={sensor} selected={sensor.sensorId === props.selected} onSelection={props.onSelection}></Sensor>
-                    </div>))}
+                            position: 'absolute',
+                            left: cursorPosition.x,
+                            top: cursorPosition.y,
+                            color: 'red',
+                            fontSize: '15px'
+                        }}
+                        onClick={()=>{}}
+                    >
+                        {cursorPosition.y}
+                        <HiCursorClick color='red'>
+                        </HiCursorClick>
+                        {cursorPosition.x}
+                    </h1>}
+                    {props.sensors.map((sensor, index) => (
+                        <div key={index} id={"sensor" + sensor.sensorId}
+                            style={{
+                                position: 'absolute',
+                                left: sensor.positionX,
+                                top: sensor.positionY,
+                                float: 'left'
+                            }}>
+                            <Sensor sensor={sensor} selected={sensor.sensorId === props.selected} onSelection={props.onSelection}></Sensor>
+                        </div>))}
+                </div>
+                <div style={{
+                    color: 'blue'
+                }}>
+                    <i>
+                        {props.plan.width}px
+                        <HiArrowRight></HiArrowRight>
+                    </i>
+                </div>
             </div>
         </>
     );
