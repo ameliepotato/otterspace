@@ -1,10 +1,10 @@
 import '@testing-library/jest-dom';
-import { fireEvent, render, screen } from '@testing-library/react';
+import { render } from '@testing-library/react';
 import Sensors from "./Sensors";
 import getMockSensors from './_mockSensorService';
 
 test('renders sensors', () => {
-  render(<Sensors sensors={getMockSensors()} />);
+  render(<Sensors sensors={getMockSensors()} plan={ {src: './plan.jpg', width: 900, heigth: 900}}/>);
   var linkElement = document.getElementById("sensors");
   expect(linkElement).toBeInTheDocument();
   expect(linkElement.childNodes.length).toBe(4);

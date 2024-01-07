@@ -60,19 +60,7 @@ function SensorModal(props) {
                         />
                         <br></br>
                         <TextField
-                            label="Position X:"
-                            id='positionX'
-                            type='number'
-                            margin='dense'
-                            value={positionX}
-                            onChange={(event) => {
-                                event.stopPropagation();
-                                setPositionX(Number(event.target.value))
-                            }}
-                        />
-                        <br></br>
-                        <TextField
-                            label="Position Y:"
+                            label="Vertical:"
                             id='positionY'
                             type="number"
                             margin='dense'
@@ -80,6 +68,17 @@ function SensorModal(props) {
                             onChange={(event) => {
                                 event.stopPropagation();
                                 setPositionY(Number(event.target.value))
+                            }}
+                        />
+                         <TextField
+                            label="Horizontal:"
+                            id='positionX'
+                            type='number'
+                            margin='dense'
+                            value={positionX}
+                            onChange={(event) => {
+                                event.stopPropagation();
+                                setPositionX(Number(event.target.value))
                             }}
                         />
                     </DialogContent>

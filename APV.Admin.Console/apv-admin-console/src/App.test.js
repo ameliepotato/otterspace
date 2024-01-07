@@ -21,7 +21,7 @@ test('edit sensor works', async () => {
   expect(editBtn.disabled).toBe(true);
   var linkElement = document.getElementById('TwoIco');
   expect(linkElement).toBeInTheDocument();
-  await fireEvent.click(linkElement);
+  await fireEvent.click(linkElement.childNodes[0]);
   expect(editBtn).toBeInTheDocument();
   expect(editBtn.disabled).toBe(false);
   await fireEvent.click(editBtn);
@@ -29,9 +29,18 @@ test('edit sensor works', async () => {
   expect(linkElement).toBeInTheDocument();
 });
 
-test('floor plan upload works', () => {
+test('map upload works', async() => {
   render(<App />);
-  const linkElement = screen.getByText(/change floor plan/i);
+  var linkElement = screen.getByText(/change map/i);
+  expect(linkElement).toBeInTheDocument();
+  await fireEvent.click(linkElement);
+  linkElement = screen.getByText((content, element) => {
+    return element.tagName.toLowerCase() === 'i' && 
+           content.indexOf('842')>=0}); 
+  expect(linkElement).toBeInTheDocument();
+  linkElement = screen.getByText((content, element) => {
+    return  element.tagName.toLowerCase() === 'i' && 
+            content.indexOf('569')>=0 });
   expect(linkElement).toBeInTheDocument();
 });
 
@@ -41,14 +50,14 @@ test('save sensors works', () => {
   expect(linkElement).toBeInTheDocument();
 });
 
-test('delete sensor works', () => {
+test('delete sensor works', async() => {
   render(<App />);
   const linkDeleteBtn = screen.getByText(/delete sensor/i);
   expect(linkDeleteBtn).toBeInTheDocument();
   var linkElement = document.getElementById('TwoIco');
   expect(linkElement).toBeInTheDocument();
-  fireEvent.click(linkElement);
-  fireEvent.click(linkDeleteBtn);
+  await fireEvent.click(linkElement.childNodes[0]);
+  await fireEvent.click(linkDeleteBtn);
   linkElement = document.getElementById('sensorTwo');
   expect(linkElement).not.toBeInTheDocument();
 });
@@ -57,19 +66,19 @@ test('select and deselect sensor works', async () => {
   render(<App />);
   var linkElement = document.getElementById("TwoIco");
   expect(linkElement).toBeInTheDocument();
-  expect(linkElement.getAttribute("fill")).toBe('blue');
-  await fireEvent.click(linkElement);
+  expect(linkElement.style.color).toBe('blue');
+  await fireEvent.click(linkElement.childNodes[0]);
   linkElement = document.getElementById("TwoIco");
   expect(linkElement).toBeInTheDocument();
-  expect(linkElement.getAttribute("fill")).toBe('red');
+  expect(linkElement.style.color).toBe('red');
   linkElement = document.getElementById("ThreeIco");
   expect(linkElement).toBeInTheDocument();
-  expect(linkElement.getAttribute("fill")).toBe('blue');
+  expect(linkElement.style.color).toBe('blue');
   linkElement = document.getElementById("sensors");
   expect(linkElement).toBeInTheDocument();
   await fireEvent.click(linkElement);
   linkElement = document.getElementById("TwoIco");
-  expect(linkElement.getAttribute("fill")).toBe('blue');
+  expect(linkElement.style.color).toBe('blue');
 });
 
 

@@ -76,7 +76,7 @@ test('edit sensor properties works', async () => {
   expect(linkElement).toBeInTheDocument();
   await fireEvent.change(linkElement, { target: { value: 'TwoTest' } });
 
-  var linkElement2 = screen.getByLabelText(/Position X:/);
+  var linkElement2 = screen.getByLabelText(/Horizontal/);
   expect(linkElement2).toBeInTheDocument();
   await fireEvent.change(linkElement2, { target: { value: 400 } });
 

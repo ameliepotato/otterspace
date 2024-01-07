@@ -4,15 +4,15 @@ import Sensor from "./Sensor";
 import getMockSensors from './_mockSensorService';
 
 test('renders unselected sensor', async () => {
-  render(<Sensor sensor={getMockSensors()[0]} selected={false} />);
+  render(<Sensor sensor={getMockSensors()[0]} selected={false}/>);
   var linkElement = document.getElementById("OneIco");
   expect(linkElement).toBeInTheDocument();
-  expect(linkElement.getAttribute("fill")).toBe('blue');
+  expect(linkElement.style.color).toBe('blue');
 });
 
 test('renders selected sensor', async () => {
-  render(<Sensor sensor={getMockSensors()[0]} selected={true} />);
+  render(<Sensor sensor={getMockSensors()[0]} selected={true}/>);
   var linkElement = document.getElementById("OneIco");
   expect(linkElement).toBeInTheDocument();
-  expect(linkElement.getAttribute("fill")).toBe('red');
+  expect(linkElement.style.color).toBe('red');
 });
