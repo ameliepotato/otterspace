@@ -7,7 +7,7 @@ function Sensor(props) {
         <>
             <Tooltip title={
                 <div onClick={(e) => { e.stopPropagation(); }}
-                    style={{ color: props.selected ? "red" : "white", size: "32px", fontSize: "24px" }}>
+                    style={{ color: props.selected ? "red" : "white", size: "32px", fontSize: "20px" }}>
                     {props.sensor.sensorId}
                     <br></br>
                     ({props.sensor.positionX}, {props.sensor.positionY})

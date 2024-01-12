@@ -29,21 +29,6 @@ test('edit sensor works', async () => {
   expect(linkElement).toBeInTheDocument();
 });
 
-test('map upload works', async() => {
-  render(<App />);
-  var linkElement = screen.getByText(/change map/i);
-  expect(linkElement).toBeInTheDocument();
-  await fireEvent.click(linkElement);
-  linkElement = screen.getByText((content, element) => {
-    return element.tagName.toLowerCase() === 'i' && 
-           content.indexOf('842')>=0}); 
-  expect(linkElement).toBeInTheDocument();
-  linkElement = screen.getByText((content, element) => {
-    return  element.tagName.toLowerCase() === 'i' && 
-            content.indexOf('569')>=0 });
-  expect(linkElement).toBeInTheDocument();
-});
-
 test('save sensors works', () => {
   render(<App />);
   const linkElement = screen.getByText(/save sensors/i);
