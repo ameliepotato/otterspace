@@ -17,8 +17,9 @@
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development",
         "MEASUREMENTSDB_CONNECTIONSTRING": "mongodb://admin:Example@localhost:27017",
-        "SENSORSERVICE_CONFIGFILE": "..\\APV.Service.Tests.Integration\\TestData\\sensorService.json"
-      }
+        "SENSORSERVICE_CONFIGFILE": "..\\APV.Service.Tests.Integration\\TestData\\sensorService.json",
+        "SENSORSERVICE_IMAGEPATH": "..\\APV.Service.Tests.Integration\\TestData\\plan.jpg"
+      } 
     },
     "Docker": {
       "commandName": "Docker",

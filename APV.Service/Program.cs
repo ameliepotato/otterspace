@@ -18,6 +18,18 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddLogging();
+
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("CorsPolicy",
+        policy =>
+        {
+            policy.WithOrigins("*")
+                                .AllowAnyHeader()
+                                .AllowAnyMethod();
+        });
+});
+
 builder.Services.AddScoped<IMeasurementService>( _ => new MeasurementService(
                 logFactory.CreateLogger<MeasurementService>(),
                 new MongoDataManager(logFactory.CreateLogger<MongoDataManager>(),
@@ -26,7 +38,8 @@ builder.Services.AddScoped<IMeasurementService>( _ => new MeasurementService(
                     "Readings")));
 builder.Services.AddScoped<ISensorService>( _ => new SensorService(
                 logFactory.CreateLogger<SensorService>(),
-                Environment.GetEnvironmentVariable("SENSORSERVICE_CONFIGFILE")));
+                Environment.GetEnvironmentVariable("SENSORSERVICE_CONFIGFILE"),
+                Environment.GetEnvironmentVariable("SENSORSERVICE_IMAGEPATH")));
 
 var app = builder.Build();
 
@@ -40,6 +53,8 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 
 app.UseAuthorization();
+
+app.UseCors();
 
 app.MapControllers();
 

@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import Sensor from './Sensor';
 import { HiArrowDown, HiArrowRight, HiCursorClick } from 'react-icons/hi';
-import { color } from '@mui/system';
 
 function Sensors(props) {
     const [cursorPosition, setCursorPosition] = useState({ x: 0, y: 0 });

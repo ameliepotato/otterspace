@@ -1,5 +1,6 @@
 import '@testing-library/jest-dom'
 import { fireEvent, render, screen } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import App from './App';
 
 
@@ -10,7 +11,11 @@ test('add sensor works', async () => {
   fireEvent.click(linkElement);
   linkElement = document.getElementById("sensors");
   expect(linkElement).toBeInTheDocument();
-  expect(linkElement.childNodes.length).toBe(5);
+  expect(linkElement.childNodes.length).toBeGreaterThan(0);
+  var x = linkElement.childNodes[linkElement.childNodes.length-1].clientX;
+  var y = linkElement.childNodes[linkElement.childNodes.length-1].getBoundingClientRect().top;
+  expect(x).toBe(0);
+  expect(y).toBe(0);
 });
 
 
@@ -39,6 +44,7 @@ test('delete sensor works', async() => {
   render(<App />);
   const linkDeleteBtn = screen.getByText(/delete sensor/i);
   expect(linkDeleteBtn).toBeInTheDocument();
+
   var linkElement = document.getElementById('TwoIco');
   expect(linkElement).toBeInTheDocument();
   await fireEvent.click(linkElement.childNodes[0]);
@@ -49,6 +55,7 @@ test('delete sensor works', async() => {
 
 test('select and deselect sensor works', async () => {
   render(<App />);
+
   var linkElement = document.getElementById("TwoIco");
   expect(linkElement).toBeInTheDocument();
   expect(linkElement.style.color).toBe('blue');

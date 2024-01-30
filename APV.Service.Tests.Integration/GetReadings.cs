@@ -17,14 +17,16 @@ namespace APV.Service.Tests.Integration
         {
             Dictionary<string, object> postParams = new Dictionary<string, object>();
 
-            postParams.Add("sensorid", "One");
+            string sensorOneid = "b1ae3e86-a94f-4368-8255-ec6e4e323e0e";
+            postParams.Add("sensorid", sensorOneid);
             postParams.Add("temperature", 22);
 
             string response = Request.Post(apiLocationPost, postParams);
 
             Assert.AreEqual("true", response.ToLower());
 
-            postParams["sensorid"] = "Two";
+            string sensorTwoid = "42fbdefa-ea35-425c-a235-4d078335419f";
+            postParams["sensorid"] = sensorTwoid;
             postParams["temperature"] = 33;
 
             response = Request.Post(apiLocationPost, postParams);
@@ -38,12 +40,12 @@ namespace APV.Service.Tests.Integration
             Assert.IsNotNull(list);
             Assert.IsTrue(list.Any());
 
-            var one = list.Where(x => ObjectProperties.IsPropertyValueEqual(x, "SensorId", "One")).FirstOrDefault();
+            var one = list.Where(x => ObjectProperties.IsPropertyValueEqual(x, "SensorId", sensorOneid)).FirstOrDefault();
 
             Assert.IsNotNull(one);
             Assert.IsTrue(ObjectProperties.IsPropertyValueEqual(one, "Value", 22));
 
-            var two = list.Where(x => ObjectProperties.IsPropertyValueEqual(x, "SensorId", "Two")).FirstOrDefault();
+            var two = list.Where(x => ObjectProperties.IsPropertyValueEqual(x, "SensorId", sensorTwoid)).FirstOrDefault();
 
             Assert.IsNotNull(two);
             Assert.IsTrue(ObjectProperties.IsPropertyValueEqual(two, "Value", 33));
@@ -55,7 +57,8 @@ namespace APV.Service.Tests.Integration
         {
             Dictionary<string, object> postParams = new Dictionary<string, object>();
 
-            postParams.Add("sensorid", "Five");
+            string sensorid = "42fbdefa-ea35-425c-a235-4d078335419f";
+            postParams.Add("sensorid", sensorid);
             postParams.Add("temperature", 22);
 
             string response = Request.Post(apiLocationPost, postParams);
@@ -76,10 +79,10 @@ namespace APV.Service.Tests.Integration
             Assert.IsTrue(list.Any());
 
             Assert.AreEqual(1, list.Where(x =>
-                string.Compare(ObjectProperties.GetPropertyValue<string>(x, "SensorId"), "Five", false) == 0).Count());
+                string.Compare(ObjectProperties.GetPropertyValue<string>(x, "SensorId"), sensorid, false) == 0).Count());
 
             JsonDocument latest = list.Where(x =>
-                string.Compare(ObjectProperties.GetPropertyValue<string>(x, "SensorId"), "Five", false) == 0).First();
+                string.Compare(ObjectProperties.GetPropertyValue<string>(x, "SensorId"), sensorid, false) == 0).First();
 
             Assert.IsNotNull(latest);
 

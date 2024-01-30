@@ -15,7 +15,7 @@ namespace APV.Service.Tests.Integration
             //arrange
             Dictionary<string, object> postParams = new Dictionary<string, object>();
             
-            postParams.Add("sensorid", "One");
+            postParams.Add("sensorid", "b1ae3e86-a94f-4368-8255-ec6e4e323e0e");
             postParams.Add("temperature", 22);
 
             //act

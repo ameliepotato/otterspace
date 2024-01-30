@@ -8,7 +8,9 @@ namespace APV.Service.Services
         private readonly ILogger<SensorService> _logger;
         private List<Sensor> _sensors;
         private string _file = Directory.GetCurrentDirectory() + Path.DirectorySeparatorChar + "sensorService.json";
-        public SensorService(ILogger<SensorService> logger, string? file = null)
+        private string _plan = Directory.GetCurrentDirectory() + Path.DirectorySeparatorChar + "plan.jpg";
+
+        public SensorService(ILogger<SensorService> logger, string? file = null, string? plan = null)
         {
             _logger = logger;
             if (!string.IsNullOrEmpty(file))
@@ -23,6 +25,7 @@ namespace APV.Service.Services
                     _logger.LogInformation($"File {file} does not exist.");
                 }
             }
+            _plan = plan ?? _plan;
             _sensors = new List<Sensor>();
             LoadFromFile();
         }
@@ -52,6 +55,24 @@ namespace APV.Service.Services
             return true;
         }
 
+        public bool SaveToFile()
+        {
+            _logger.LogInformation($"Saving sensors to file {_file}");
+            try
+            {
+                string jsonString = JsonSerializer.Serialize(_sensors) ?? "[]";
+
+                File.WriteAllText(_file, jsonString); 
+            }
+            catch (Exception e)
+            {
+                _logger.LogError($"Write error: {e.Message}");
+                return false;
+            }
+            _logger.LogInformation($"Saved {_sensors.Count} sensors to file {_file}");
+            return true;
+        }
+
         public Sensor? FindSensor(string id)
         {
             Sensor? result = _sensors.FirstOrDefault(x => string.Compare(x.Id, id, true) == 0);
@@ -65,6 +86,29 @@ namespace APV.Service.Services
         public int SensorCount()
         {
             return _sensors.Count;
+        }
+
+        public bool SaveSensors(List<Sensor> sensors)
+        {
+            _sensors=sensors;
+            SaveToFile();
+            return true;
+        }
+
+        public List<Sensor> GetSensors()
+        {
+            return _sensors;
+        }
+
+        public byte[] GetPlan()
+        {
+            return File.ReadAllBytes(_plan);
+        }
+
+        public bool SetPlan(byte[] plan)
+        {
+            File.WriteAllBytes(_plan, plan);
+            return true;
         }
     }
 }
