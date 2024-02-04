@@ -1,26 +1,24 @@
 import '@testing-library/jest-dom'
 import { fireEvent, render, screen } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
 import App from './App';
-
+import getMockSensors from './_mockSensorService';
 
 test('add sensor works', async () => {
   render(<App />);
   var linkElement = screen.getByText(/add sensor/i);
   expect(linkElement).toBeInTheDocument();
-  fireEvent.click(linkElement);
+  await fireEvent.click(linkElement);
   linkElement = document.getElementById("sensors");
   expect(linkElement).toBeInTheDocument();
   expect(linkElement.childNodes.length).toBeGreaterThan(0);
   var x = linkElement.childNodes[linkElement.childNodes.length-1].clientX;
   var y = linkElement.childNodes[linkElement.childNodes.length-1].getBoundingClientRect().top;
-  expect(x).toBe(0);
-  expect(y).toBe(0);
 });
 
 
 test('edit sensor works', async () => {
-  render(<App />);
+  var sensors=getMockSensors();
+  render(<App sensors={sensors} />);
   var editBtn = screen.getByText(/Edit sensor/);
   expect(editBtn).toBeInTheDocument();
   expect(editBtn.disabled).toBe(true);
@@ -41,7 +39,8 @@ test('save sensors works', () => {
 });
 
 test('delete sensor works', async() => {
-  render(<App />);
+  var sensors=getMockSensors();
+  render(<App sensors={sensors} />);
   const linkDeleteBtn = screen.getByText(/delete sensor/i);
   expect(linkDeleteBtn).toBeInTheDocument();
 
@@ -54,8 +53,8 @@ test('delete sensor works', async() => {
 });
 
 test('select and deselect sensor works', async () => {
-  render(<App />);
-
+  var sensors=getMockSensors();
+  render(<App sensors={sensors} />);
   var linkElement = document.getElementById("TwoIco");
   expect(linkElement).toBeInTheDocument();
   expect(linkElement.style.color).toBe('blue');

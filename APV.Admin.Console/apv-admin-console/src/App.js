@@ -6,8 +6,8 @@ import axios from 'axios';
 import Sensors from './Sensors';
 import SensorModal from './SensorModal';
 
-function App() {
-  const [sensors, setSensors] = useState([]);
+function App(props) {
+  const [sensors, setSensors] = useState(props.sensors??[]);
   const [selected, setSelected] = useState(null);
   const [dirty, setDirty] = useState(false);
   const [plan, setPlan] = useState({ src: '', width: 0, height: 0 });
@@ -15,7 +15,6 @@ function App() {
   function isSelected() {
     return selected != null && selected.length > 0;
   }
-
 
   function getSensorsAPV() {
     axios({
