@@ -1,6 +1,6 @@
 [
   {
-    "Id": "One",
+    "Id": "b1ae3e86-a94f-4368-8255-ec6e4e323e0e",
     "Name": null,
     "Position": {
       "Item1": 161,
@@ -8,7 +8,7 @@
     }
   },
   {
-    "Id": "Two",
+    "Id": "42fbdefa-ea35-425c-a235-4d078335419f",
     "Name": null,
     "Position": {
       "Item1": 530,
@@ -16,15 +16,7 @@
     }
   },
   {
-    "Id": "Three",
-    "Name": null,
-    "Position": {
-      "Item1": 2,
-      "Item2": 5
-    }
-  },
-  {
-    "Id": "Five",
+    "Id": "7b4ca887-6111-4c9d-beeb-cc152246f9d5",
     "Name": null,
     "Position": {
       "Item1": 664,
@@ -32,15 +24,7 @@
     }
   },
   {
-    "Id": "Six",
-    "Name": null,
-    "Position": {
-      "Item1": 98,
-      "Item2": 132
-    }
-  },
-  {
-    "Id": "Seven",
+    "Id": "e38e6e65-0521-4a87-93c4-452bf65ba692",
     "Name": null,
     "Position": {
       "Item1": 299,
@@ -48,11 +32,19 @@
     }
   },
   {
-    "Id": "Eight",
+    "Id": "6b63831a-cdf8-4d19-81b4-b7d6b05c99b5",
     "Name": null,
     "Position": {
-      "Item1": 661,
-      "Item2": 134
+      "Item1": 72,
+      "Item2": 118
+    }
+  },
+  {
+    "Id": "c11aa69a-410c-4c72-9b0d-eeea2a2ec357",
+    "Name": null,
+    "Position": {
+      "Item1": 530,
+      "Item2": 135
     }
   }
 ]

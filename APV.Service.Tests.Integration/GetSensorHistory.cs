@@ -22,7 +22,8 @@ namespace APV.Service.Tests.Integration
 
             DateTime start = DateTime.UtcNow.AddSeconds(-1);
 
-            postParams.Add("sensorid", "Six");
+            string sensorId = "e38e6e65-0521-4a87-93c4-452bf65ba692";
+            postParams.Add("sensorid", sensorId);
             postParams.Add("temperature", 22);
 
             string response = Request.Post(apiLocationPost, postParams);
@@ -37,7 +38,7 @@ namespace APV.Service.Tests.Integration
 
             DateTime end = DateTime.UtcNow.AddSeconds(1);
 
-            response = Request.Get($"{apiLocationGet}?sensorId=Six&from={start}&to={end}");
+            response = Request.Get($"{apiLocationGet}?sensorId={sensorId}&from={start}&to={end}");
 
             List<JsonDocument> list = JsonSerializer.Deserialize<List<JsonDocument>>(response) ?? new List<JsonDocument>();
 

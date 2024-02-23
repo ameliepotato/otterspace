@@ -2,34 +2,77 @@ import './App.css';
 import React from 'react';
 import Button from '@mui/material/Button';
 import { useState, useEffect } from 'react';
+import axios from 'axios';
 import Sensors from './Sensors';
-import getMockSensors from './_mockSensorService';
 import SensorModal from './SensorModal';
-import getImageMeta from './getImageMeta';
 
-function App() {
-  const [sensors, setSensors] = useState(getMockSensors());
+function App(props) {
+  const [sensors, setSensors] = useState(props.sensors??[]);
   const [selected, setSelected] = useState(null);
   const [dirty, setDirty] = useState(false);
-  const [plan, setPlan] = useState({ src: '', width: 0, height: 0});
-  
+  const [plan, setPlan] = useState({ src: '', width: 0, height: 0 });
+
   function isSelected() {
     return selected != null && selected.length > 0;
   }
 
+  function getSensorsAPV() {
+    axios({
+      method: 'get',
+      url: process.env.REACT_APP_APVSERVICE_SENSORS + "GetSensors"
+    })
+      .then(function (response) {
+        var sensorList = [];
+        response.data.forEach(element => {
+          sensorList.push({
+            sensorId: element.Id,
+            positionX: element.Position.Item1,
+            positionY: element.Position.Item2
+          });
+        });
+        setSensors(sensorList);
+      });
+  }
+
+  function saveSensorsAPV() {
+    var sensorList = [];
+    sensors.forEach(element => {
+      sensorList.push({
+        Position: {
+          Item1: element.positionX,
+          Item2: element.positionY
+        }
+      });
+    });
+    axios.post(process.env.REACT_APP_APVSERVICE_SENSORS + "SaveSensors",
+      { sensors: JSON.stringify(sensorList) },
+      {
+        headers: {
+          'Content-Type': 'multipart/form-data'
+        }
+      })
+      .then((response) => {
+        console.log(response);
+      }, (error) => {
+        console.log(error);
+      });
+  }
+
+
   function addNewSensor() {
     setDirty(true);
     var sensorPosition = document.getElementById("cursor");
-    if(sensorPosition == null){
-      sensorPosition = { offsetLeft: 0, offsetTop: 0};
+    if (sensorPosition == null) {
+      sensorPosition = { offsetLeft: 0, offsetTop: 0 };
     }
     var sensor = { sensorId: "NewSensor" + (new Date()).getTime(), positionX: sensorPosition.offsetLeft, positionY: sensorPosition.offsetTop };
     setSensors([...sensors, sensor]);
     setSelected(sensor.sensorId);
   }
 
-  function saveSensors() {
+  async function saveSensors() {
     setDirty(false);
+    saveSensorsAPV();
     console.log('Saved ' + sensors.length + ' sensors');
   }
 
@@ -51,13 +94,26 @@ function App() {
     setSelected(sensor.sensorId);
   }
 
-  function loadPlanImage(){
-    getImageSize('./plan.jpg');
+  async function loadPlanImage() {
+    var result = await axios.get(
+      process.env.REACT_APP_APVSERVICE_SENSORS + "GetPlan"
+    );
+    setPlan({ src: 'data:image/jpeg;base64,' + result.data, width: 842, height: 569 });
   }
 
-  function getImageSize(image){
-    getImageMeta(image,  (err, img) => {
-        setPlan({src: img.src, width: img.naturalWidth, height: img.naturalHeight});
+  function updatePlanImage(event) {
+    axios.post(process.env.REACT_APP_APVSERVICE_SENSORS + "SavePlan",
+      { plan: event.target.files[0] },
+      {
+        headers: {
+          'Content-Type': 'multipart/form-data'
+        }
+      })
+      .then((response) => {
+        loadPlanImage();
+        console.log(response);
+      }, (error) => {
+        console.log(error);
       });
   }
 
@@ -70,6 +126,7 @@ function App() {
 
   useEffect(() => {
     loadPlanImage();
+    getSensorsAPV();
   }, []);
 
   return (
@@ -85,7 +142,10 @@ function App() {
         <label className='btn-left'></label>
         <Button disabled={!dirty} variant='contained' className='btn-left' onClick={saveSensors}> Save sensors</Button>
         <label className='btn-left'></label>
-        <Button variant='contained' className='btn-left' onClick={loadPlanImage}>Change map</Button>
+        <input accept="image/*" id="icon-button-file" type="file" style={{ display: 'none' }}  onChange={updatePlanImage} />
+        <label htmlFor="icon-button-file">
+          <Button variant='contained' className='btn-left'component="span">Change map</Button>
+        </label>
       </div>
       <br></br>
       <div onClick={onSelection}>

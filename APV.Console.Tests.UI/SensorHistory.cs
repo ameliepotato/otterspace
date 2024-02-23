@@ -15,7 +15,7 @@ namespace APV.Console.Tests.UI
         public void DialogShowsOnCLickAndClosesWithX()
         {
             _webDriver.Url = "http://localhost:37070/";
-            List<IWebElement> links = _webDriver.FindElements(By.Id("btnOne")).ToList();
+            List<IWebElement> links = _webDriver.FindElements(By.Id("btnb1ae3e86-a94f-4368-8255-ec6e4e323e0e")).ToList();
             Assert.That(links.Count, Is.EqualTo(1));
 
             IWebElement entry = links[0];
@@ -28,14 +28,14 @@ namespace APV.Console.Tests.UI
 
             Assert.That(entries.Count, Is.EqualTo(1));
 
-            entries = _webDriver.FindElements(By.Id("historyModalOne")).ToList();
+            entries = _webDriver.FindElements(By.Id("historyModalb1ae3e86-a94f-4368-8255-ec6e4e323e0e")).ToList();
             Assert.That(entries.Count == 1);
 
             entry = entries[0].FindElement(By.ClassName("close"));
 
             Assert.That(entry, Is.Not.Null);
 
-            entries = _webDriver.FindElements(By.Id("chartImgOne")).ToList();
+            entries = _webDriver.FindElements(By.Id("chartImgb1ae3e86-a94f-4368-8255-ec6e4e323e0e")).ToList();
 
             Assert.That(entries.Count, Is.EqualTo(1));
 

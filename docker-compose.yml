@@ -36,8 +36,10 @@ services:
         environment:
             - MEASUREMENTSDB_CONNECTIONSTRING=mongodb://admin:Example@measurementsdb:27017/
             - SENSORSERVICE_CONFIGFILE=../sensorService/sensorService.json 
+            - SENSORSERVICE_IMAGEPATH=../sensorService/plan.jpg
         volumes:
             - .\APV.Service.Tests.Integration\TestData\sensorService.json:/sensorService/sensorService.json
+            - .\APV.Service.Tests.Integration\TestData\plan.jpg:/sensorService/plan.jpg
 
     apvconsole:
         container_name: apvconsole
