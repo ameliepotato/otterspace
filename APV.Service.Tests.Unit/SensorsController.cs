@@ -7,6 +7,8 @@ using Microsoft.Extensions.Primitives;
 using System.Collections.Generic;
 using Microsoft.AspNetCore.Http;
 using System.Text;
+using System.IO;
+using SharpCompress.Common;
 
 namespace APV.Service.Tests.Unit
 {
@@ -60,15 +62,16 @@ namespace APV.Service.Tests.Unit
                 new MockImplementations.SensorService(new List<Sensor>()),
                 new MockImplementations.MeasurementService(new List<Measurement>()));
 
-            Dictionary<string, StringValues> formData = new Dictionary<string, StringValues>();
-
             string plan = Directory.GetCurrentDirectory() + "\\..\\..\\..\\TestData\\plan.jpg";
-            formData["planjpg"] = System.Text.Encoding.ASCII.GetString(File.ReadAllBytes(plan));
+            System.IO.Stream fileReader = File.Open(plan, FileMode.Open);
 
-            FormCollection keyValuePairs = new FormCollection(formData);
+            FormFileCollection keyValuePairs = new FormFileCollection();
+
+            keyValuePairs.Add(new FormFile(fileReader, 0, fileReader.Length, "planjpg", "plan.jpg"));
+
             var controllerContext = new ControllerContext()
             {
-                HttpContext = Mock.Of<HttpContext>(ctx => ctx.Request.Form == keyValuePairs)
+                HttpContext = Mock.Of<HttpContext>(ctx => ctx.Request.Form.Files == keyValuePairs)
             };
 
             sensorController.ControllerContext = controllerContext;
@@ -77,7 +80,11 @@ namespace APV.Service.Tests.Unit
 
             Assert.AreEqual("true", result.ToLower());
 
-            Assert.AreEqual(File.ReadAllBytes(plan).Length, sensorController.GetPlan().Length);
+            fileReader.Close();
+
+            Assert.AreEqual(System.Convert.ToBase64String(File.ReadAllBytes(plan)),
+                sensorController.GetPlan());
+
         }
     }
 }
